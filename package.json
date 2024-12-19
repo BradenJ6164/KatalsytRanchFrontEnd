@@ -4,7 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "packageManager": "yarn@1.22.19",
-"scripts": {
+  "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -13,14 +13,18 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^5.0.3",
     "@mdi/font": "7.4.47",
+    "@studiometa/vue-mapbox-gl-workspace": "studiometa/vue-mapbox-gl",
     "core-js": "^3.37.1",
+    "mapbox-gl": "^3.9.0",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
+    "@studiometa/vue-mapbox-gl": "^2.5.0",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^22.9.0",
     "@vitejs/plugin-vue": "^5.1.4",

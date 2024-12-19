@@ -3,8 +3,9 @@
     <v-main>
       <router-view />
     </v-main>
+    <NavBar/>
 
-    <AppFooter />
+<!--    <AppFooter />-->
   </v-app>
 </template>
 
