@@ -15,10 +15,17 @@
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^5.0.3",
     "@mdi/font": "7.4.47",
+    "@mdx-js/mdx": "^3.1.0",
     "@studiometa/vue-mapbox-gl-workspace": "studiometa/vue-mapbox-gl",
     "core-js": "^3.37.1",
+    "js-yaml": "^4.1.0",
     "mapbox-gl": "^3.9.0",
+    "markdown-it-container": "^4.0.0",
+    "markdown-it-front-matter": "^0.2.4",
+    "md-editor-v3": "^5.1.1",
+    "portal-vue": "^3.0.0",
     "roboto-fontface": "*",
+    "vite-plugin-mdx": "^3.6.1",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
   },

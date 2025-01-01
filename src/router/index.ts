@@ -11,7 +11,31 @@ import { routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
+  routes: [
+    {
+      path: '/guides',
+      component: () => import('@/layouts/default.vue'),
+      children: [
+        {
+          path: '',
+          name: 'Document',
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import(/* webpackChunkName: "home" */ '@/components/RenderMarkdown.vue'),
+        },
+        {
+          path: ':any(.*)',
+          name: 'Document',
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import(/* webpackChunkName: "home" */ '@/components/RenderMarkdown.vue'),
+        },
+
+      ],
+    },
+    ...setupLayouts(routes)],
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
