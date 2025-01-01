@@ -1,9 +1,13 @@
 <template>
   <v-app>
+    <portal-target name="table-of-contents">
+
+    </portal-target>
+    <NavBar />
     <v-main>
       <router-view />
     </v-main>
-    <NavBar/>
+
 
 <!--    <AppFooter />-->
   </v-app>

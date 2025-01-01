@@ -11,9 +11,12 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
+
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+
     VueRouter({
       dts: 'src/typed-router.d.ts',
     }),
@@ -66,6 +69,8 @@ export default defineConfig({
       '.ts',
       '.tsx',
       '.vue',
+      '.md',
+      '.mdx',
     ],
   },
   server: {

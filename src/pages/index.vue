@@ -71,35 +71,65 @@
               </div>
             </template>
             <template #append>
-              <v-dialog max-width="340">
-                <template v-slot:activator="{ props: activatorProps }">
-                  <v-btn
-                    color="primary"
-                    v-bind="activatorProps"
+              <v-btn
+                color="primary"
+                to="/guides/houseRules"
 
-                    width="204"
-                  >
-                   House Rules
-                  </v-btn>
-                </template>
+                width="204"
+              >
+                House Rules
+              </v-btn>
+            </template>
 
-                <template v-slot:default="{ isActive }">
-                  <v-card
-                    prepend-icon="mdi-package"
-                    text="When using the activator slot, you must bind the slot props to the activator element."
-                    title="The House Rules"
-                  >
-                    <template v-slot:actions>
-                      <v-btn
-                        color="primary"
-                        class="ml-auto"
-                        text="Close"
-                        @click="isActive.value = false"
-                      ></v-btn>
-                    </template>
-                  </v-card>
+
+
+          </v-card>
+        </v-col>
+        <v-col cols="12">
+          <v-card
+            class="py-4"
+            color="surface-variant"
+
+            prepend-icon="mdi-wifi"
+            rounded="lg"
+            variant="outlined"
+          >
+
+
+            <template #title>
+              <h2 class="text-h5 font-weight-bold">Wi-Fi</h2>
+            </template>
+
+            <template #subtitle>
+              <div class="text-subtitle-1">
+                Hell yeah! There's Wi-Fi! Scan the QR code with your iOS or Android phone to join
+              </div>
+            </template>
+
+            <template #text>
+              <v-img src="https://i.imgur.com/46y7MTw.png" width="120px">
+              </v-img>
+
+            </template>
+            <template #append>
+              <v-menu>
+                <template v-slot:activator="{ props }">
+
+                  <v-btn  v-bind="props" color="primary">Wifi Credentials</v-btn>
                 </template>
-              </v-dialog>
+                <v-card>
+                  <v-card-title>
+                    Wifi Information
+                  </v-card-title>
+                  <v-card-text>
+                    Wifi Name: The Ranch <br/>
+                    Password: VIEWS4DAYS
+                  </v-card-text>
+
+                </v-card>
+              </v-menu>
+
+
             </template>
 
 
