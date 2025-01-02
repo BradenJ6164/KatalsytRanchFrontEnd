@@ -13,5 +13,6 @@ declare module 'vue' {
     RenderMarkdown: typeof import('./components/RenderMarkdown.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Winter: typeof import('./components/HomeScreenEffects/Winter.vue')['default']
   }
 }
