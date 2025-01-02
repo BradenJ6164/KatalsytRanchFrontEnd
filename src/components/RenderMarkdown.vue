@@ -64,22 +64,22 @@ export default {
 <template>
 
   <portal to="table-of-contents">
-  <v-navigation-drawer location="right" app permanent persistent touchless disable-resize-watcher>
+<!--  <v-navigation-drawer location="right" app permanent persistent touchless disable-resize-watcher>-->
 
-    <v-container>
-      <h2>Table of Contents</h2>
-      <v-responsive v-if="loading" class="align-center text-center fill-height">
-        <v-progress-circular color="secondary" size="128" width="12" indeterminate></v-progress-circular>
-      </v-responsive>
-      <div v-else>
-        <MdCatalog :editorId="id" :scrollElement="scrollElement"/>
-      </div>
-
-
-    </v-container>
+<!--    <v-container>-->
+<!--      <h2>Table of Contents</h2>-->
+<!--      <v-responsive v-if="loading" class="align-center text-center fill-height">-->
+<!--        <v-progress-circular color="secondary" size="128" width="12" indeterminate></v-progress-circular>-->
+<!--      </v-responsive>-->
+<!--      <div v-else>-->
+<!--        <MdCatalog :editorId="id" :scrollElement="scrollElement"/>-->
+<!--      </div>-->
 
 
-  </v-navigation-drawer>
+<!--    </v-container>-->
+
+
+<!--  </v-navigation-drawer>-->
   </portal>
   <v-container v-if="loading">
     <v-responsive class="align-center text-center fill-height">
