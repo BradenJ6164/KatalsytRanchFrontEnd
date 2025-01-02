@@ -17,6 +17,15 @@
         <br/>
         <div class="text-h4">{{ currentTime.toLocaleDateString() }}</div>
         <div class="text-h6 font-weight-light">{{ currentTime.toLocaleTimeString() }}</div>
+
+        <br/>
+
+
+        <div v-if="currentReservation" class="text-h4 font-weight-bold">{{currentReservation?.Name}}</div>
+        <div v-if="currentReservation" class="text-h6 font-weight-light">Party of {{(parseInt(currentReservation?.Adults) + parseInt(currentReservation?.Children))}}</div>
+<!--        <div v-if="currentReservation" class="text-h5 font-weight-regular">Checkout on {{weekdayMap[currentReservation?.CheckOut.dayOfWeek()]}} </div>-->
+        <div v-if="currentReservation" class="text-h5 font-weight-regular">Checkout on {{weekdayMap[currentReservation?.CheckOut.toJSDate().getDay()]}} @ {{currentReservation?.CheckOut.toJSDate().toLocaleTimeString()}}</div>
+
       </div>
 
       <div class="py-4" />
@@ -46,7 +55,7 @@
             </template>
 
             <template #append>
-              <v-btn  color="primary" to="/nearby">Check In</v-btn>
+              <v-btn  color="primary" @click="checkIn">Check In</v-btn>
             </template>
 
 
@@ -242,8 +251,30 @@
 <script setup lang="ts">
 //
 import {useCurrentTime} from "./../hooks/useCurrentTime"
+import {useCurrentReservation} from "./../hooks/useCurrentReservation";
 const { currentTime } = useCurrentTime();
-console.log(currentTime.value);
+const {currentReservation} = useCurrentReservation();
+
+
+
+async function checkIn() {
+
+
+
+}
+
+
+const weekdayMap = {
+  [0]: "Sunday",
+  [1]: "Monday",
+  [2]: "Tuesday",
+  [3]: "Wednesday",
+  [4]: "Thursday",
+  [5]: "Friday",
+  [6]: "Saturday",
+}
+
+
 
 
 const date = computed(()=>{

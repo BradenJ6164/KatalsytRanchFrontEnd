@@ -2,6 +2,7 @@
 
   <v-speed-dial
     app
+
     location="top end"
     transition="fade-transition"
   >
@@ -14,7 +15,8 @@
         icon="mdi-dots-horizontal"
         location="bottom end"
         app
-        absolute
+
+        sticky
 
       ></v-fab>
     </template>
@@ -41,11 +43,16 @@
 
     </v-btn>
 
-<!--    <v-btn  to="/nearby" value="nearby">-->
-<!--      <v-icon>mdi-map-marker</v-icon>-->
+    <v-btn  to="/nearby" value="nearby">
+      <v-icon>mdi-map-marker</v-icon>
 
-<!--      <span>Nearby</span>-->
-<!--    </v-btn>-->
+      <span>Nearby</span>
+    </v-btn>
+    <v-btn  to="/gallery" value="gallery">
+      <v-icon>mdi-image-multiple</v-icon>
+
+      <span>Gallery</span>
+    </v-btn>
   </v-bottom-navigation>
 
 
