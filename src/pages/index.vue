@@ -14,11 +14,14 @@
         <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
 
         <h1 class="text-h2 font-weight-bold">The Ranch</h1>
+        <br/>
+        <div class="text-h4">{{ currentTime.toLocaleDateString() }}</div>
+        <div class="text-h6 font-weight-light">{{ currentTime.toLocaleTimeString() }}</div>
       </div>
 
       <div class="py-4" />
-      <h2 class="text-h4 font-weight-regular">Your Checklist
-:</h2>
+<!--      <h2 class="text-h4 font-weight-regular">Your Checklist-->
+<!--:</h2>-->
       <div class="py-2" />
       <v-row>
         <v-col cols="12">
@@ -238,5 +241,18 @@
 
 <script setup lang="ts">
 //
+import {useCurrentTime} from "./../hooks/useCurrentTime"
+const { currentTime } = useCurrentTime();
+console.log(currentTime.value);
+
+
+const date = computed(()=>{
+  const now = new Date();
+  return now.toDateString()
+})
+const time = computed(()=>{
+  const now = new Date();
+  return now.toTimeString()
+})
 
 </script>
