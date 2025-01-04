@@ -1,15 +1,13 @@
-<script>
-import {MdPreview, MdCatalog} from 'md-editor-v3';
+<script lang="ts">
+import {MdPreview, MdCatalog,MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
 import 'md-editor-v3/lib/style.css';
 import {useDisplay, useTheme} from "vuetify";
-import {computed} from "vue";
-import {Portal} from "portal-vue";
+import {useAuthStore} from "@/stores/auth";
 
 export default {
   components: {
-    Portal,
-    MdPreview, MdCatalog
+    MdPreview, MdCatalog,MdEditor
   },
   data() {
     return {
@@ -19,14 +17,16 @@ export default {
       scrollElement: document.documentElement,
       rightAppBarIcon: undefined,
       drawer: false,
+      edit: false,
     }
   },
   setup() {
     const mobile = useDisplay();
+    const authStore = useAuthStore();
 
 
 
-    return { mobile}
+    return { mobile,authStore };
   },
   async mounted() {
     await this.update();
@@ -90,10 +90,10 @@ export default {
 
     </v-navigation-drawer>
     <v-fab
-      size="large"
+
       @click="drawer = !drawer"
-      style="margin-bottom: 75px;"
-      color="primary"
+      style="margin-top: 75px;"
+      color="secondary"
       icon="mdi-menu"
       location="top end"
       app
@@ -101,7 +101,20 @@ export default {
       sticky
 
     ></v-fab>
-    <MdPreview :editorId="id" :modelValue="content" :theme="mdiPreviewTheme"/>
+    <v-fab
+      v-if="authStore.isAuthenticated"
+      @click="edit = !edit"
+      color="primary"
+      icon="mdi-pencil"
+      location="bottom start"
+      app
+
+
+      sticky
+
+    ></v-fab>
+    <MdPreview v-if="!edit || !authStore.isAuthenticated"  :editorId="id" :modelValue="content" :theme="mdiPreviewTheme"/>
+    <MdEditor v-if="edit && authStore.isAuthenticated" language="en-us" :editorId="id" v-model="content" :theme="mdiPreviewTheme" :toolbarsExclude="['github','htmlPreview','fullscreen','save']" noUploadImg></MdEditor>
   </v-container>
 
 
