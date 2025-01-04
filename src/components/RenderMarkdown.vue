@@ -13,6 +13,7 @@ import {processErrors} from "@/utils/processErrors";
 const id = "editor"
 const content = ref("");
 const originalContent = ref("");
+const originalName = ref("")
 const scrollElement = ref(document.documentElement);
 const drawer = ref(false)
 const edit = ref(false)
@@ -36,6 +37,7 @@ const {currentGuide, refresh} = useGuide(guideID);
 watch(currentGuide, (newValue) => {
   if (newValue !== undefined) {
     originalContent.value = newValue.content;
+    originalName.value = newValue.name;
     content.value = newValue.content
     loading.value = false;
 
@@ -58,12 +60,18 @@ const mdiPreviewTheme = computed(() => {
 })
 
 
+function revertChanges() {
+  content.value = originalContent.value
+}
+
 async function saveGuide() {
   axiosInstance.post('/api/guides/setGuide', {
     guide_id: guideID.value,
     content: content.value,
     name: currentGuide.value?.name
   }).then(() => {
+    originalContent.value = content.value;
+    originalName.value = currentGuide.value?.name ?? "";
     Toast.fire(
       {
         icon: "success",
@@ -85,6 +93,56 @@ async function saveGuide() {
 
 
 <template>
+  <v-app-bar
+    v-if="edit"
+    color="warning"
+    density="compact"
+  >
+    <v-app-bar-title>
+      Guide Editor: &nbsp;
+      <input
+        v-if="currentGuide"
+        v-model="currentGuide.name"
+        class="text-white border-dashed p-5"
+        name="fname"
+        placeholder="Guide Name..."
+        style="outline: none"
+        type="text"
+      >
+    </v-app-bar-title>
+    <!--    <template #extension>-->
+    <!--      <v-text-field-->
+    <!--        v-if="currentGuide"-->
+    <!--        v-model="currentGuide.name"-->
+    <!--        density="compact"-->
+    <!--        -->
+    <!--        flat-->
+    <!--        placeholder="Guide Name..."-->
+    <!--      />-->
+    <!--    </template>-->
+    <v-spacer />
+    <v-btn
+      v-if="content !== originalContent"
+      @click="revertChanges"
+    >
+      Revert Changes
+    </v-btn>
+    <v-btn
+      :disabled="content !== originalContent"
+      @click="edit = !edit"
+    >
+      Exit Editor
+    </v-btn>
+    <v-btn
+      v-if="currentGuide"
+      :disabled="content == originalContent && currentGuide.name == originalName"
+
+      :loading="saveLoading"
+      @click="saveGuide"
+    >
+      Save Guide
+    </v-btn>
+  </v-app-bar>
   <v-container v-if="loading">
     <v-responsive class="align-center text-center fill-height">
       <v-progress-circular
@@ -138,17 +196,29 @@ async function saveGuide() {
 
       @click="drawer = !drawer"
     />
-    <v-fab
-      v-if="authStore.isAuthenticated"
-      app
-      color="primary"
-      icon="mdi-pencil"
-      location="bottom start"
-      sticky
+
+    <v-toolbar
+      v-if="currentGuide && authStore.isAuthenticated && !edit"
+      style="background: none;"
+    >
+      <v-spacer />
+      <span
+        v-if="currentGuide"
+        class="text-sm-button"
+      >
+        Last Updated: {{
+          new Date(parseInt(currentGuide?.last_save) * 1000).toDateString() + " @ " + new Date(parseInt(currentGuide?.last_save) * 1000).toLocaleTimeString()
+        }}
+      </span>
+      <v-btn
+        icon="mdi-pencil"
+
+        variant="text"
+        @click="edit = !edit"
+      />
+    </v-toolbar>
 
 
-      @click="edit = !edit"
-    />
     <MdPreview
       v-if="!edit || !authStore.isAuthenticated"
       :editor-id="id"
@@ -169,16 +239,6 @@ async function saveGuide() {
       type="warning"
     >
       <v-alert-title>Unsaved Changes</v-alert-title>
-
-      <template #append>
-        <v-btn
-          :loading="saveLoading"
-          color="secondary"
-          @click="saveGuide"
-        >
-          Save
-        </v-btn>
-      </template>
     </v-alert>
   </v-container>
 

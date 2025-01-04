@@ -6,17 +6,21 @@ interface GuideData {
   name: number;
   guide_id: string;
   content: string;
+  last_save: number;
 }
 
 export const useGuide = (id: number | Ref<number>) => {
-  const currentGuide = ref<GuideData | undefined>(undefined);
+  const currentGuide = ref<GuideData | undefined | -1>(undefined);
   const updateGuide = async () => {
 
 
-    const response = await axiosInstance.get(`/api/guides/getGuide?id=${unref(id)}`);
-    const body = response.data;
+    await axiosInstance.get(`/api/guides/getGuide?id=${unref(id)}`).then((response) => {
+      const body = response.data;
+      currentGuide.value = body.result as GuideData | undefined;
+    }).catch(() => {
+      currentGuide.value = -1
+    });
 
-    currentGuide.value = body.result as GuideData | undefined;
 
   };
   watch(
