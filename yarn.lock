@@ -1119,6 +1119,11 @@
     "@types/node" "*"
     "@types/responselike" "^1.0.0"
 
+"@types/cookie@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"
+  integrity sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==
+
 "@types/debug@^4.0.0":
   version "4.1.12"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.12.tgz#a155f21690871953410df4b6b6f53187f0500917"
@@ -1551,13 +1556,22 @@
   dependencies:
     upath "^2.0.1"
 
-"@vueuse/core@^12.3.0":
+"@vueuse/core@12.3.0", "@vueuse/core@^12.3.0":
   version "12.3.0"
   resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-12.3.0.tgz#c502cad93412f80588c1ca7fcbc8be88e279c793"
   integrity sha512-cnV8QDKZrsyKC7tWjPbeEUz2cD9sa9faxF2YkR8QqNwfofgbOhmfIgvSYmkp+ttSvfOw4E6hLcQx15mRPr0yBA==
   dependencies:
     "@types/web-bluetooth" "^0.0.20"
     "@vueuse/metadata" "12.3.0"
+    "@vueuse/shared" "12.3.0"
+    vue "^3.5.13"
+
+"@vueuse/integrations@^12.3.0":
+  version "12.3.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/integrations/-/integrations-12.3.0.tgz#c17c51948f207e10281bec5ce24ab102065ac43c"
+  integrity sha512-Ha42DSxc87BIf4JONUNammWod5X7iaUVqpYohMgzpDYBjAxhmhWtsMCcFpfUMXZYiMaS2xltUEiRldSXC9kmGw==
+  dependencies:
+    "@vueuse/core" "12.3.0"
     "@vueuse/shared" "12.3.0"
     vue "^3.5.13"
 
@@ -1885,6 +1899,11 @@ confbox@^0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/confbox/-/confbox-0.1.8.tgz#820d73d3b3c82d9bd910652c5d4d599ef8ff8b06"
   integrity sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==
+
+cookie@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.7.2.tgz#556369c472a2ba910f2979891b526b3436237ed7"
+  integrity sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==
 
 copy-to-clipboard@^3.3.3:
   version "3.3.3"
@@ -4660,6 +4679,14 @@ unist-util-visit@^5.0.0:
     "@types/unist" "^3.0.0"
     unist-util-is "^6.0.0"
     unist-util-visit-parents "^6.0.0"
+
+universal-cookie@^7.2.2:
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-7.2.2.tgz#93ae9ec55baab89b24300473543170bb8112773c"
+  integrity sha512-fMiOcS3TmzP2x5QV26pIH3mvhexLIT0HmPa3V7Q7knRfT9HG6kTwq02HZGLPw0sAOXrAmotElGRvTLCMbJsvxQ==
+  dependencies:
+    "@types/cookie" "^0.6.0"
+    cookie "^0.7.2"
 
 unplugin-auto-import@^0.17.6:
   version "0.17.8"

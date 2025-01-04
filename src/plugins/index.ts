@@ -9,6 +9,7 @@ import vuetify from './vuetify'
 import pinia from '../stores'
 import router from '../router'
 import './configMarkdown'
+import './axios'
 
 
 import portal from "portal-vue"

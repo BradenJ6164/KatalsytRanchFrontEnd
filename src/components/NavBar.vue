@@ -66,8 +66,22 @@
 import Swal from 'sweetalert2'
 
 import '@sweetalert2/themes/dark/dark.css';
+import {axiosInstance} from "@/plugins/axios";
+import {useCookies} from "@vueuse/integrations/useCookies";
+import {Toast} from "@/plugins/sweetalert";
+
+const cookies = useCookies(["baja-security"])
 
 async function login() {
+  interface sessionResult {
+    success: boolean;
+    result : {
+      session: {
+        token: string;
+      }
+    }
+  }
+
   let usernameInput: HTMLInputElement
   let passwordInput: HTMLInputElement
 
@@ -95,7 +109,7 @@ async function login() {
       const username = usernameInput.value
       const password = passwordInput.value
       if (!username || !password) {
-        Swal.showValidationMessage(`Please enter username and password`)
+        Swal.showValidationMessage(`Please enter email and password`)
       }
       return { username, password }
     },
@@ -103,16 +117,100 @@ async function login() {
   if (formValues) {
     formValues = formValues as formResponse;
 
+    Swal.showLoading()
+    axiosInstance.post("/api/auth/login",{
+      email: formValues.username,
+      password: formValues.password,
+    }).then(response => {
+      const data = response.data as sessionResult
+      cookies.set("baja-security",data.result.session.token,{sameSite:"strict"})
+      Toast.fire({
+        icon: "success",
+        text: "Login success!",
+      })
+    }).catch(async (error)=> {
+      await Swal.fire({
+        title: 'Invalid Login',
+        text: 'Email and Password is incorrect.',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+      login()
+    }).finally(()=>{
+      Swal.hideLoading()
+    })
+
   }
 }
 
-function register() {
-  Swal.fire({
-    title: 'Error!',
-    text: 'Do you want to continue',
-    icon: 'error',
-    confirmButtonText: 'Cool'
-  })
+async function register() {
+  let emailInput: HTMLInputElement
+  let usernameInput: HTMLInputElement
+  let passwordInput: HTMLInputElement
+  let entitlementInput: HTMLInputElement
+  interface formResponse {
+    username: string,
+    email: string,
+    password: string,
+    entitlement: string
+  }
+  let { value: formValues } = await Swal.fire({
+    title: "Register to Panel",
+    html: `
+    <input id="username" class="swal2-input" type="text" placeholder="Username">
+     <input id="email" class="swal2-input" type="email" placeholder="Email address">
+    <input id="password" class="swal2-input" type="password" placeholder="Password">
+     <input id="entitlement" class="swal2-input" type="password" placeholder="Entitlement ID">
+  `,
+    focusConfirm: false,
+    showCancelButton: true,
+    didOpen: () => {
+      const popup = Swal.getPopup()!
+      emailInput = popup.querySelector('#email') as HTMLInputElement
+      usernameInput = popup.querySelector('#username') as HTMLInputElement
+      passwordInput = popup.querySelector('#password') as HTMLInputElement
+      entitlementInput = popup.querySelector('#entitlement') as HTMLInputElement
+      emailInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
+      usernameInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
+      passwordInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
+      entitlementInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
+    },
+    confirmButtonText: 'Register',
+    preConfirm: () => {
+      const email = emailInput.value
+      const username = usernameInput.value
+      const password = passwordInput.value
+      const entitlement = entitlementInput.value
+      if (!username || !password || !entitlement || !email) {
+        Swal.showValidationMessage(`Please enter user, email, password, and entitlement. `)
+      }
+      return { email,username, password,entitlement }
+    },
+  });
+  if (formValues) {
+    formValues = formValues as formResponse;
+
+    Swal.showLoading()
+    axiosInstance.post("/api/auth/register",{
+      name: formValues.username,
+      email: formValues.email,
+      password: formValues.password,
+      ["registration_key"]: formValues.entitlement,
+    }).then(response => {
+        console.log(response)
+    }).catch(async (error)=> {
+      await Swal.fire({
+        title: 'Invalid Registration',
+        text:  error.response.data.errors,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+      register()
+    }).finally(()=>{
+      Swal.hideLoading()
+    })
+
+  }
 }
 function reload() {
   window.location.reload()

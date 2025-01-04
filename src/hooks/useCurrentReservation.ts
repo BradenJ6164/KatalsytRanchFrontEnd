@@ -1,5 +1,7 @@
 import {onBeforeUnmount, ref} from "vue";
 import ICAL from "ical.js";
+import {useAxios} from "@vueuse/integrations/useAxios";
+import {axiosInstance} from "@/plugins/axios";
 
 interface ReservationData {
   Name: string;
@@ -19,8 +21,8 @@ export const useCurrentReservation = () => {
   const updateCurrentReservation = async () => {
 
 
-    const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/reservations/getCurrentReservation");
-    const body = await response.json();
+    const response = await axiosInstance.get("/api/reservations/getCurrentReservation");
+    const body = response.data;
     currentReservation.value = body.reservation as ReservationData | undefined;
 
     //
