@@ -6,8 +6,8 @@ The alarm will disarm when you unlock the door via the August app. If you'd like
 Each room has its own electric heating element and can be manually adjusted. They are on a program and will auto adjust based on preset program. Remember, heat rises, so often you won't need the upstairs heating units. We get a lot of solar gain in the house that keeps it toasty, even in the winter.
   ## Air Conditioning
 Controlled by the Ecobee smart thermostat in the kitchen.
-:::info Note:
-Note: keeping window coverings pulled will help to maintain temp during the day.
+:::info Window Coverings
+Keeping window coverings pulled will help to maintain temp during the day.
 :::
 
 # Corn Hole Sets

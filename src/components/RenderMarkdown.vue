@@ -104,7 +104,22 @@ export default {
   <!--      :content="content"-->
   <!--    ></VMarkdownView>-->
 </template>
-<style>
+<style >
+.hyphenate {
+  word-wrap: break-word ;
+  overflow-wrap: break-word ;
+
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
+.md-editor-preview {
+  word-break: break-word ;
+}
+.md-content .md-preview,
+.md-content .md-html {
+  word-break: break-word ;
+}
 
 /**
  * src/styles/settings.scss

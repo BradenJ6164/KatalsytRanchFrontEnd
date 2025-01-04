@@ -4,7 +4,10 @@ import markdownContainer from "markdown-it-container";
 
 
 config({
+
+
   markdownItConfig(md) {
+
     md.use(markdownContainer, "info", {
 
       render: function (tokens: any, idx: any) {
@@ -27,9 +30,7 @@ style="font-size: 28px; height: 28px; width: 28px;"></i></div>
       }
     });
     md.use(markdownContainer, "warning", {
-      validate: function(params) {
-        return params.trim().match(/^warning\s+(.*)$/);
-      },
+
       render: function (tokens: any, idx: any) {
         const m = tokens[idx].info.trim().match(/^warning\s+(.*)$/);
         if (tokens[idx].nesting === 1) {
@@ -50,9 +51,7 @@ style="font-size: 28px; height: 28px; width: 28px;"></i></div>
       }
     });
     md.use(markdownContainer, "error", {
-      validate: function(params) {
-        return params.trim().match(/^error\s+(.*)$/);
-      },
+
       render: function (tokens: any, idx: any) {
         const m = tokens[idx].info.trim().match(/^error\s+(.*)$/);
         if (tokens[idx].nesting === 1) {
@@ -74,9 +73,7 @@ style="font-size: 28px; height: 28px; width: 28px;"></i></div>
       }
     });
     md.use(markdownContainer, "success", {
-      validate: function(params) {
-        return params.trim().match(/^success\s+(.*)$/);
-      },
+
       render: function (tokens: any, idx: any) {
         const m = tokens[idx].info.trim().match(/^success\s+(.*)$/);
         if (tokens[idx].nesting === 1) {
@@ -100,9 +97,6 @@ style="font-size: 28px; height: 28px; width: 28px;"></i></div>
 
 
     md.use(markdownContainer, "spoiler", {
-      validate: function(params) {
-        return params.trim().match(/^spoiler\s+(.*)$/);
-      },
       render: function (tokens: any, idx: any) {
         const m = tokens[idx].info.trim().match(/^spoiler\s+(.*)$/);
         if (tokens[idx].nesting === 1) {
