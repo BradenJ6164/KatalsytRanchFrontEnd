@@ -17,7 +17,8 @@ export default {
       loading: true,
       id: "preview-only",
       scrollElement: document.documentElement,
-      rightAppBarIcon: undefined
+      rightAppBarIcon: undefined,
+      drawer: false,
     }
   },
   setup() {
@@ -63,30 +64,43 @@ export default {
 
 <template>
 
-  <portal to="table-of-contents">
-<!--  <v-navigation-drawer location="right" app permanent persistent touchless disable-resize-watcher>-->
-
-<!--    <v-container>-->
-<!--      <h2>Table of Contents</h2>-->
-<!--      <v-responsive v-if="loading" class="align-center text-center fill-height">-->
-<!--        <v-progress-circular color="secondary" size="128" width="12" indeterminate></v-progress-circular>-->
-<!--      </v-responsive>-->
-<!--      <div v-else>-->
-<!--        <MdCatalog :editorId="id" :scrollElement="scrollElement"/>-->
-<!--      </div>-->
 
 
-<!--    </v-container>-->
-
-
-<!--  </v-navigation-drawer>-->
-  </portal>
   <v-container v-if="loading">
     <v-responsive class="align-center text-center fill-height">
       <v-progress-circular color="secondary" size="128" width="12" indeterminate></v-progress-circular>
     </v-responsive>
   </v-container>
   <v-container fluid v-else>
+
+    <v-navigation-drawer  v-model="drawer" location="right" app disable-resize-watcher>
+
+      <v-container>
+        <h2>Table of Contents</h2>
+        <v-responsive v-if="loading" class="align-center text-center fill-height">
+          <v-progress-circular color="secondary" size="128" width="12" indeterminate></v-progress-circular>
+        </v-responsive>
+        <div v-else>
+          <MdCatalog :editorId="id" :scrollElement="scrollElement"/>
+        </div>
+
+
+      </v-container>
+
+
+    </v-navigation-drawer>
+    <v-fab
+      size="large"
+      @click="drawer = !drawer"
+      style="margin-bottom: 75px;"
+      color="primary"
+      icon="mdi-menu"
+      location="top end"
+      app
+
+      sticky
+
+    ></v-fab>
     <MdPreview :editorId="id" :modelValue="content" :theme="mdiPreviewTheme"/>
   </v-container>
 
