@@ -64,6 +64,9 @@
           </v-card>
         </v-col>
         <v-col cols="12">
+          <v-file-upload></v-file-upload>
+        </v-col>
+        <v-col cols="12">
           <v-card
             class="py-4"
             color="surface-variant"
@@ -157,6 +160,8 @@
 
 <script setup lang="ts">
 //
+import {VFileUpload} from "vuetify/labs/VFileUpload"
+
 import {useCurrentTime} from "./../hooks/useCurrentTime"
 import {useCurrentReservation} from "./../hooks/useCurrentReservation";
 const { currentTime } = useCurrentTime();
