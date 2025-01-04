@@ -1,126 +1,175 @@
-<script lang="ts">
-import {MdPreview, MdCatalog,MdEditor} from 'md-editor-v3';
+<script lang="ts" setup>
+import {MdCatalog, MdEditor, MdPreview} from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
 import 'md-editor-v3/lib/style.css';
-import {useDisplay, useTheme} from "vuetify";
+import {useTheme} from "vuetify";
 import {useAuthStore} from "@/stores/auth";
+import {useGuide} from "@/hooks/useGuide";
+import {axiosInstance} from "@/plugins/axios";
+import {Toast} from "@/plugins/sweetalert";
+import Swal from "sweetalert2";
+import {processErrors} from "@/utils/processErrors";
 
-export default {
-  components: {
-    MdPreview, MdCatalog,MdEditor
-  },
-  data() {
-    return {
-      content: "",
-      loading: true,
-      id: "preview-only",
-      scrollElement: document.documentElement,
-      rightAppBarIcon: undefined,
-      drawer: false,
-      edit: false,
-    }
-  },
-  setup() {
-    const mobile = useDisplay();
-    const authStore = useAuthStore();
-
-
-
-    return { mobile,authStore };
-  },
-  async mounted() {
-    await this.update();
-    this.rightAppBarIcon = await document.getElementById("right_app_bar_icon")
-  },
-  watch: {
-    $route(to, from) {
-      this.update();
-    }
-  },
-  computed: {
-    mdiPreviewTheme: function () {
-      const theme = useTheme()
-      return theme.global.current.value.dark == true?'dark':'light'
-    }
-  },
-  methods: {
-    async update() {
-      this.loading = true;
-      let path = this.$route.path;
-      if (path.includes('/guides')) {
-        path = path.replace(/^\/guides/, '');
-      }
-      // console.warn(path)
-      let res = await fetch(`${window.location.origin}/mdx/guides${path}.md`)
-      if (!res.ok) res = await fetch(`${window.location.origin}/mdx//guides${path}.mdx`)
-      this.content = await res.text();
-      this.loading = false;
-      this.$forceUpdate();
-    }
-  }
+const id = "editor"
+const content = ref("");
+const originalContent = ref("");
+const scrollElement = ref(document.documentElement);
+const drawer = ref(false)
+const edit = ref(false)
+const loading = ref(true)
+const saveLoading = ref(false)
+const theme = useTheme()
+const authStore = useAuthStore();
+const route = useRoute()
+let path = route.fullPath;
+if (path.includes('/guides')) {
+  path = path.replace(/^\/guides\//, '');
 }
+const guideID = parseInt(path) ?? -1
+
+const {currentGuide} = useGuide(guideID);
+
+watch(currentGuide, (newValue) => {
+  if (newValue !== undefined) {
+    originalContent.value = newValue.content;
+    content.value = newValue.content
+    loading.value = false;
+
+  } else {
+    loading.value = true;
+  }
+  // Your custom hook logic here
+});
+
+
+const mdiPreviewTheme = computed(() => {
+  return theme.global.current.value.dark == true ? 'dark' : 'light'
+})
+
+
+async function saveGuide() {
+  axiosInstance.post('/api/guides/setGuide', {
+    guide_id: guideID,
+    content: content.value,
+    name: currentGuide.value?.name
+  }).then((response) => {
+    Toast.fire(
+      {
+        icon: "success",
+        text: "Guide saved!",
+      }
+    )
+  }).catch((error) => {
+    Swal.fire({
+      icon: "error",
+      title: "Guide Save Error",
+      text: processErrors(error.response.data.errors),
+      confirmButtonText: "OK",
+    })
+  })
+
+}
+
 </script>
 
 
 <template>
-
-
-
   <v-container v-if="loading">
     <v-responsive class="align-center text-center fill-height">
-      <v-progress-circular color="secondary" size="128" width="12" indeterminate></v-progress-circular>
+      <v-progress-circular
+        color="secondary"
+        indeterminate
+        size="128"
+        width="12"
+      />
     </v-responsive>
   </v-container>
-  <v-container fluid v-else>
-
-    <v-navigation-drawer  v-model="drawer" location="right" app disable-resize-watcher>
-
+  <v-container
+    v-else
+    fluid
+  >
+    <v-navigation-drawer
+      v-if="!edit && !loading"
+      v-model="drawer"
+      app
+      disable-resize-watcher
+      location="right"
+    >
       <v-container>
         <h2>Table of Contents</h2>
-        <v-responsive v-if="loading" class="align-center text-center fill-height">
-          <v-progress-circular color="secondary" size="128" width="12" indeterminate></v-progress-circular>
+        <v-responsive
+          v-if="loading"
+          class="align-center text-center fill-height"
+        >
+          <v-progress-circular
+            color="secondary"
+            indeterminate
+            size="128"
+            width="12"
+          />
         </v-responsive>
         <div v-else>
-          <MdCatalog :editorId="id" :scrollElement="scrollElement"/>
+          <MdCatalog
+            :editor-id="id"
+            :scroll-element="scrollElement"
+          />
         </div>
-
-
       </v-container>
-
-
     </v-navigation-drawer>
     <v-fab
-
-      @click="drawer = !drawer"
-      style="margin-top: 75px;"
+      v-if="!edit"
+      app
       color="secondary"
       icon="mdi-menu"
       location="top end"
-      app
-
       sticky
+      style="margin-top: 75px;"
 
-    ></v-fab>
+      @click="drawer = !drawer"
+    />
     <v-fab
       v-if="authStore.isAuthenticated"
-      @click="edit = !edit"
+      app
       color="primary"
       icon="mdi-pencil"
       location="bottom start"
-      app
-
-
       sticky
 
-    ></v-fab>
-    <MdPreview v-if="!edit || !authStore.isAuthenticated"  :editorId="id" :modelValue="content" :theme="mdiPreviewTheme"/>
-    <MdEditor v-if="edit && authStore.isAuthenticated" language="en-us" :editorId="id" v-model="content" :theme="mdiPreviewTheme" :toolbarsExclude="['github','htmlPreview','fullscreen','save']" noUploadImg></MdEditor>
+
+      @click="edit = !edit"
+    />
+    <MdPreview
+      v-if="!edit || !authStore.isAuthenticated"
+      :editor-id="id"
+      :model-value="content"
+      :theme="mdiPreviewTheme"
+    />
+    <MdEditor
+      v-if=" edit && authStore.isAuthenticated"
+      v-model="content"
+      :editor-id="id"
+      :theme="mdiPreviewTheme"
+      :toolbars-exclude="['github','htmlPreview','fullscreen','save']"
+      language="en-us"
+      no-upload-img
+    />
+    <v-alert
+      v-if="edit && content !== originalContent"
+      type="warning"
+    >
+      <v-alert-title>Unsaved Changes</v-alert-title>
+
+      <template #append>
+        <v-btn
+          :loading="saveLoading"
+          color="secondary"
+          @click="saveGuide"
+        >
+          Save
+        </v-btn>
+      </template>
+    </v-alert>
   </v-container>
-
-
-
-
-
 
 
   <!--    <MdCatalog :editorId="id" :scrollElement="scrollElement" />-->
@@ -131,21 +180,23 @@ export default {
   <!--      :content="content"-->
   <!--    ></VMarkdownView>-->
 </template>
-<style >
+<style>
 .hyphenate {
-  word-wrap: break-word ;
-  overflow-wrap: break-word ;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
   hyphens: auto;
 }
+
 .md-editor-preview {
-  word-break: break-word ;
+  word-break: break-word;
 }
+
 .md-content .md-preview,
 .md-content .md-html {
-  word-break: break-word ;
+  word-break: break-word;
 }
 
 /**
