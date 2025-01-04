@@ -21,13 +21,17 @@ const saveLoading = ref(false)
 const theme = useTheme()
 const authStore = useAuthStore();
 const route = useRoute()
+
+const guideID = ref(-1)
+
 let path = route.fullPath;
 if (path.includes('/guides')) {
   path = path.replace(/^\/guides\//, '');
 }
-const guideID = parseInt(path) ?? -1
+guideID.value = parseInt(path) ?? -1
 
-const {currentGuide} = useGuide(guideID);
+
+const {currentGuide, refresh} = useGuide(guideID);
 
 watch(currentGuide, (newValue) => {
   if (newValue !== undefined) {
@@ -40,6 +44,13 @@ watch(currentGuide, (newValue) => {
   }
   // Your custom hook logic here
 });
+watch(route, () => {
+  let path = route.fullPath;
+  if (path.includes('/guides')) {
+    path = path.replace(/^\/guides\//, '');
+  }
+  guideID.value = parseInt(path) ?? -1
+})
 
 
 const mdiPreviewTheme = computed(() => {
