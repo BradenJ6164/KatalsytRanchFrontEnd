@@ -20,9 +20,16 @@
 
       ></v-fab>
     </template>
-    <v-btn key="3" @click="register" icon="mdi-account-plus"></v-btn>
 
-    <v-btn key="2" @click="login" icon="mdi-login"></v-btn>
+
+      <v-btn v-if="!authStore.isAuthenticated" key="4" @click="register" icon="mdi-account-plus"></v-btn>
+
+      <v-btn v-if="!authStore.isAuthenticated" key="3" @click="login" icon="mdi-login"></v-btn>
+
+      <v-btn v-if="authStore.isAuthenticated" key="2" @click="logout" icon="mdi-logout"></v-btn>
+
+
+
     <v-btn key="1" @click="reload" icon="mdi-refresh"></v-btn>
 
 
@@ -68,9 +75,43 @@ import Swal from 'sweetalert2'
 import '@sweetalert2/themes/dark/dark.css';
 import {axiosInstance} from "@/plugins/axios";
 import {useCookies} from "@vueuse/integrations/useCookies";
-import {Toast} from "@/plugins/sweetalert";
+import {hideLoading, showLoading, Toast} from "@/plugins/sweetalert";
+import {useAuthStore} from "@/stores/auth";
+import {processErrors} from "@/utils/processErrors";
+
+const authStore = useAuthStore()
+
 
 const cookies = useCookies(["baja-security"])
+
+async function logout() {
+  Swal.fire({
+    title: "Do you want to logout of the panel?",
+    showCancelButton: true,
+    cancelButtonText: "Cancel",
+    confirmButtonText: "Logout",
+    showLoaderOnConfirm: true,
+    preConfirm: async () => {
+
+       await axiosInstance.post("/api/auth/logout").then(async()=>{
+          cookies.remove("baja-security")
+          await authStore.fetchUser()
+
+        }).catch((error)=>{
+          Swal.showValidationMessage(processErrors(error.response.data.errors));
+        })
+
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Toast.fire({
+        icon: "success",
+        text: "Logout success!",
+      })
+    }
+  })
+}
 
 async function login() {
   interface sessionResult {
@@ -89,7 +130,7 @@ async function login() {
     username: string,
     password: string
   }
-  let { value: formValues } = await Swal.fire({
+ await Swal.fire({
     title: "Login to Panel",
     html: `
     <input id="username" class="swal2-input" type="email" placeholder="Email address">
@@ -105,42 +146,34 @@ async function login() {
       passwordInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
     },
     confirmButtonText: 'Login',
-    preConfirm: () => {
+    showLoaderOnConfirm: true,
+    preConfirm: async () => {
+
       const username = usernameInput.value
       const password = passwordInput.value
       if (!username || !password) {
         Swal.showValidationMessage(`Please enter email and password`)
       }
-      return { username, password }
+      await axiosInstance.post("/api/auth/login",{
+        email: username,
+        password: password,
+      }).then(async (response) => {
+        const data = response.data as sessionResult
+        cookies.set("baja-security",data.result.session.token,{sameSite:"strict"})
+        await authStore.fetchUser()
+      }).catch((error)=>{
+        Swal.showValidationMessage(processErrors(error.response.data.errors));
+      })
     },
-  });
-  if (formValues) {
-    formValues = formValues as formResponse;
-
-    Swal.showLoading()
-    axiosInstance.post("/api/auth/login",{
-      email: formValues.username,
-      password: formValues.password,
-    }).then(response => {
-      const data = response.data as sessionResult
-      cookies.set("baja-security",data.result.session.token,{sameSite:"strict"})
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    if (result.isConfirmed) {
       Toast.fire({
         icon: "success",
         text: "Login success!",
       })
-    }).catch(async (error)=> {
-      await Swal.fire({
-        title: 'Invalid Login',
-        text: 'Email and Password is incorrect.',
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      })
-      login()
-    }).finally(()=>{
-      Swal.hideLoading()
-    })
-
-  }
+    }
+  });
 }
 
 async function register() {
@@ -154,7 +187,7 @@ async function register() {
     password: string,
     entitlement: string
   }
-  let { value: formValues } = await Swal.fire({
+  await Swal.fire({
     title: "Register to Panel",
     html: `
     <input id="username" class="swal2-input" type="text" placeholder="Username">
@@ -176,7 +209,9 @@ async function register() {
       entitlementInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
     },
     confirmButtonText: 'Register',
-    preConfirm: () => {
+    showLoaderOnConfirm: true,
+    preConfirm: async () => {
+
       const email = emailInput.value
       const username = usernameInput.value
       const password = passwordInput.value
@@ -184,33 +219,30 @@ async function register() {
       if (!username || !password || !entitlement || !email) {
         Swal.showValidationMessage(`Please enter user, email, password, and entitlement. `)
       }
-      return { email,username, password,entitlement }
-    },
-  });
-  if (formValues) {
-    formValues = formValues as formResponse;
+      await  axiosInstance.post("/api/auth/register",{
+        name: username,
+        email: email,
+        password: password,
+        ["registration_key"]: entitlement,
+      }).then(() => {
 
-    Swal.showLoading()
-    axiosInstance.post("/api/auth/register",{
-      name: formValues.username,
-      email: formValues.email,
-      password: formValues.password,
-      ["registration_key"]: formValues.entitlement,
-    }).then(response => {
-        console.log(response)
-    }).catch(async (error)=> {
-      await Swal.fire({
-        title: 'Invalid Registration',
-        text:  error.response.data.errors,
-        icon: 'error',
-        confirmButtonText: 'Ok'
+      }).catch((error)=>{
+        Swal.showValidationMessage(processErrors(error.response.data.errors));
       })
-      register()
-    }).finally(()=>{
-      Swal.hideLoading()
-    })
+    },
 
-  }
+
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Toast.fire({
+        icon: "success",
+        text: "Register success!",
+      })
+      login()
+    }
+  });
+
+
 }
 function reload() {
   window.location.reload()

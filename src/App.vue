@@ -7,7 +7,17 @@
 <script lang="ts" setup>
   //
 
+
+
+  const authStore = useAuthStore();
+
+  onMounted(() => {
+    authStore.fetchUser()
+    authStore.startPolling();
+  });
+
   import {useTheme} from "vuetify";
+  import {useAuthStore} from "@/stores/auth";
   const theme = useTheme()
 
   onBeforeMount(()=>{

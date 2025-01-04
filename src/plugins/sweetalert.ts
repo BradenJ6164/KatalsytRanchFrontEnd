@@ -11,3 +11,16 @@ export const Toast = Swal.mixin({
     toast.onmouseleave = Swal.resumeTimer;
   }
 });
+export function showLoading() {
+  Swal.fire({
+    title: "Loading",
+    allowEscapeKey: false,
+    allowOutsideClick: false,
+  })
+  Swal.showLoading()
+}
+
+export function hideLoading() {
+  Swal.close()
+  Swal.showLoading()
+}

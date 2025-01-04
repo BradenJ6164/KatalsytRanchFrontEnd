@@ -1,0 +1,57 @@
+// stores/auth.ts
+import { defineStore } from 'pinia';
+import { ref, onMounted, onUnmounted } from 'vue';
+import {useCookies} from "@vueuse/integrations/useCookies";
+import {axiosInstance} from "@/plugins/axios";
+
+export const useAuthStore = defineStore('auth', () => {
+  const isAuthenticated = ref(false);
+  let intervalId: number | null = null;
+
+  //API call to check authentication
+  async function fetchUser() {
+    const cookies = useCookies(["baja-security"])
+    const token = cookies.get("baja-security")
+    if (token !== undefined && token !== "") {
+
+
+      axiosInstance.post("/api/auth/verifyToken").then((res) => {
+        isAuthenticated.value = res?.data?.success ?? false
+      }).catch(() => {
+        isAuthenticated.value = false
+      });
+
+    } else {
+      isAuthenticated.value = false
+    }
+
+  }
+
+  // Start polling for authentication status
+  function startPolling() {
+    // Immediately fetch user data
+    fetchUser();
+
+    // Set up the interval to poll every 30 seconds
+    intervalId = setInterval(fetchUser, 30000);
+  }
+
+  // Stop polling
+  function stopPolling() {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }
+
+  // Lifecycle hook to start/stop polling
+  onMounted(startPolling);
+  onUnmounted(stopPolling);
+
+  return {
+    isAuthenticated,
+    startPolling,
+    stopPolling,
+    fetchUser,
+  };
+});

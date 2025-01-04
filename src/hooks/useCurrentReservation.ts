@@ -64,7 +64,7 @@ export const useCurrentReservation = () => {
     // // console.log(currentReservation)
     // currentReservation.value = reservation as ReservationData | undefined;
   };
-  const updateReservationInterval = setInterval(updateCurrentReservation, 15000);
+  const updateReservationInterval = setInterval(updateCurrentReservation, 60000);
   onBeforeUnmount(() => {
     clearInterval(updateReservationInterval);
   });
