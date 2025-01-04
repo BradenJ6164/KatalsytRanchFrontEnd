@@ -18,46 +18,51 @@ export const useCurrentReservation = () => {
   const updateCurrentReservation = async () => {
 
 
+    const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/reservations/getCurrentReservation");
+    const body = await response.json();
+    const reservation = body.reservation as ReservationData | undefined;
+    currentReservation.value = reservation;
 
-    const response = await fetch(import.meta.env.VITE_ICAL_LINK);
-    const body = await response.text();
-    // console.log(body);
-    const calendar =new ICAL.Component(ICAL.parse(body));
-    const events = calendar.getAllSubcomponents("vevent")
-
-    function parseDataToObject(dataString) {
-      // Split the data into lines and process each line
-      const lines = dataString.trim().split("\n");
-      const result = {};
-
-      lines.forEach(line => {
-        const [key, ...valueParts] = line.split(":");
-        const keyTrimmed = key.trim();
-        const value = valueParts.join(":").trim(); // Join in case of ":" in the value
-        if (keyTrimmed && value) {
-          result[keyTrimmed] = value;
-        }
-      });
-
-      return result;
-    }
-
-    let reservation: undefined|ReservationData = undefined;
-    events.forEach((event)=>{
-      const dtstart = event.getFirstPropertyValue("dtstart")
-      const dtend = event.getFirstPropertyValue("dtend")
-      const now = Math.floor(Date.now() / 1000)
-      if (now>= dtstart.toUnixTime() && now <= dtend.toUnixTime()) {
-
-        reservation = parseDataToObject(event.getFirstPropertyValue("description"))
-        reservation["CheckIn"] = dtstart;
-        reservation["CheckOut"] = dtend;
-      }
-    })
-    // console.log(currentReservation)
-    currentReservation.value = reservation as ReservationData | undefined;
+    //
+    // const response = await fetch(import.meta.env.VITE_ICAL_LINK);
+    // const body = await response.text();
+    // // console.log(body);
+    // const calendar =new ICAL.Component(ICAL.parse(body));
+    // const events = calendar.getAllSubcomponents("vevent")
+    //
+    // function parseDataToObject(dataString) {
+    //   // Split the data into lines and process each line
+    //   const lines = dataString.trim().split("\n");
+    //   const result = {};
+    //
+    //   lines.forEach(line => {
+    //     const [key, ...valueParts] = line.split(":");
+    //     const keyTrimmed = key.trim();
+    //     const value = valueParts.join(":").trim(); // Join in case of ":" in the value
+    //     if (keyTrimmed && value) {
+    //       result[keyTrimmed] = value;
+    //     }
+    //   });
+    //
+    //   return result;
+    // }
+    //
+    // let reservation: undefined|ReservationData = undefined;
+    // events.forEach((event)=>{
+    //   const dtstart = event.getFirstPropertyValue("dtstart")
+    //   const dtend = event.getFirstPropertyValue("dtend")
+    //   const now = Math.floor(Date.now() / 1000)
+    //   if (now>= dtstart.toUnixTime() && now <= dtend.toUnixTime()) {
+    //
+    //     reservation = parseDataToObject(event.getFirstPropertyValue("description"))
+    //     reservation["CheckIn"] = dtstart;
+    //     reservation["CheckOut"] = dtend;
+    //   }
+    // })
+    // // console.log(currentReservation)
+    // currentReservation.value = reservation as ReservationData | undefined;
   };
-  const updateReservationInterval = setInterval(updateCurrentReservation, 3000);
+  const updateReservationInterval = setInterval(updateCurrentReservation, 15000);
   onBeforeUnmount(() => {
     clearInterval(updateReservationInterval);
   });

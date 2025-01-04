@@ -25,7 +25,7 @@
         <div v-if="currentReservation" class="text-h4 font-weight-bold">{{currentReservation?.Name}}</div>
         <div v-if="currentReservation" class="text-h6 font-weight-light">Party of {{(parseInt(currentReservation?.Adults) + parseInt(currentReservation?.Children))}}</div>
 <!--        <div v-if="currentReservation" class="text-h5 font-weight-regular">Checkout on {{weekdayMap[currentReservation?.CheckOut.dayOfWeek()]}} </div>-->
-        <div v-if="currentReservation" class="text-h5 font-weight-regular">Checkout on {{weekdayMap[currentReservation?.CheckOut.toJSDate().getDay()]}} @ {{currentReservation?.CheckOut.toJSDate().toLocaleTimeString()}}</div>
+        <div v-if="currentReservation" class="text-h5 font-weight-regular">Checkout on {{weekdayMap[new Date(currentReservation?.CheckOut).getDay()]}} @ {{new Date(currentReservation?.CheckOut).toLocaleTimeString()}}</div>
 
       </div>
 
