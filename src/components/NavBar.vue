@@ -20,8 +20,11 @@
 
       ></v-fab>
     </template>
+    <v-btn key="3" @click="register" icon="mdi-account-plus"></v-btn>
 
+    <v-btn key="2" @click="login" icon="mdi-login"></v-btn>
     <v-btn key="1" @click="reload" icon="mdi-refresh"></v-btn>
+
 
   </v-speed-dial>
   <v-bottom-navigation bg-color="primary" dark fixed height="56">
@@ -60,7 +63,57 @@
 
 
 <script setup lang="ts">
+import Swal from 'sweetalert2'
 
+import '@sweetalert2/themes/dark/dark.css';
+
+async function login() {
+  let usernameInput: HTMLInputElement
+  let passwordInput: HTMLInputElement
+
+  interface formResponse {
+    username: string,
+    password: string
+  }
+  let { value: formValues } = await Swal.fire({
+    title: "Login to Panel",
+    html: `
+    <input id="username" class="swal2-input" type="email" placeholder="Email address">
+    <input id="password" class="swal2-input" type="password" placeholder="Password">
+  `,
+    focusConfirm: false,
+    showCancelButton: true,
+    didOpen: () => {
+      const popup = Swal.getPopup()!
+      usernameInput = popup.querySelector('#username') as HTMLInputElement
+      passwordInput = popup.querySelector('#password') as HTMLInputElement
+      usernameInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
+      passwordInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
+    },
+    confirmButtonText: 'Login',
+    preConfirm: () => {
+      const username = usernameInput.value
+      const password = passwordInput.value
+      if (!username || !password) {
+        Swal.showValidationMessage(`Please enter username and password`)
+      }
+      return { username, password }
+    },
+  });
+  if (formValues) {
+    formValues = formValues as formResponse;
+
+  }
+}
+
+function register() {
+  Swal.fire({
+    title: 'Error!',
+    text: 'Do you want to continue',
+    icon: 'error',
+    confirmButtonText: 'Cool'
+  })
+}
 function reload() {
   window.location.reload()
 }

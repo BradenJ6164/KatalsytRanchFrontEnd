@@ -1,5 +1,6 @@
-import { ref, onBeforeUnmount } from "vue";
+import {onBeforeUnmount, ref} from "vue";
 import ICAL from "ical.js";
+
 interface ReservationData {
   Name: string;
   "Reservation Code": string;
@@ -20,8 +21,7 @@ export const useCurrentReservation = () => {
 
     const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/reservations/getCurrentReservation");
     const body = await response.json();
-    const reservation = body.reservation as ReservationData | undefined;
-    currentReservation.value = reservation;
+    currentReservation.value = body.reservation as ReservationData | undefined;
 
     //
     // const response = await fetch(import.meta.env.VITE_ICAL_LINK);
