@@ -60,10 +60,10 @@ const mdiPreviewTheme = computed(() => {
 
 async function saveGuide() {
   axiosInstance.post('/api/guides/setGuide', {
-    guide_id: guideID,
+    guide_id: guideID.value,
     content: content.value,
     name: currentGuide.value?.name
-  }).then((response) => {
+  }).then(() => {
     Toast.fire(
       {
         icon: "success",
