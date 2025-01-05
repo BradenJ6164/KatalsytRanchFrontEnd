@@ -282,6 +282,7 @@ async function saveGuide() {
       :footers="['markdownTotal', 0, '=', 1, 'scrollSwitch']"
       :theme="mdiPreviewTheme"
       :toolbars-exclude="['github','htmlPreview','fullscreen','save']"
+
       language="en-us"
       no-upload-img
     >
