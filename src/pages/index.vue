@@ -20,7 +20,7 @@
         </h1>
         <br>
         <div class="text-h4">
-          {{ currentTime.toLocaleDateString() }}
+          {{ currentTime.toDateString() }}
         </div>
         <div class="text-h6 font-weight-light">
           {{ currentTime.toLocaleTimeString() }}
@@ -49,8 +49,8 @@
           v-if="currentReservation"
           class="text-h5 font-weight-regular"
         >
-          Checkout on
-          {{ weekdayMap[new Date(currentReservation?.CheckOut * 1000).getDay()] }} @
+          Checkout:
+          {{ getWeekday(new Date(currentReservation?.CheckOut * 1000)) }} @
           {{ new Date(currentReservation?.CheckOut * 1000).toLocaleTimeString() }}
         </div>
       </div>
@@ -198,16 +198,27 @@ async function checkIn() {
 }
 
 
-const weekdayMap = {
-  [0]: "Sunday",
-  [1]: "Monday",
-  [2]: "Tuesday",
-  [3]: "Wednesday",
-  [4]: "Thursday",
-  [5]: "Friday",
-  [6]: "Saturday",
-}
+const weekdayMap = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+]
 
+function getWeekday(date: Date) {
+  const weekday = date.getDay() as number
+  const now = new Date(Date.now())
+  if (weekday == now.getDay()) {
+    return "Today"
+  }
+  if (weekday - 1 == now.getDay()) {
+    return "Tomorrow"
+  }
+  return weekdayMap[date.getDay() as number] as string;
+}
 
 const date = computed(() => {
   const now = new Date();

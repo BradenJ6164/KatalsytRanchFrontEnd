@@ -281,11 +281,15 @@ async function saveGuide() {
       :editor-id="id"
       :footers="['markdownTotal', 0, '=', 1, 'scrollSwitch']"
       :theme="mdiPreviewTheme"
+
       :toolbars-exclude="['github','htmlPreview','fullscreen','save']"
 
       language="en-us"
       no-upload-img
     >
+      <!--      <template #defToolbars>-->
+      <!--        <QrcodeTool />-->
+      <!--      </template>-->
       <template #defFooters>
         <span>
           {{

@@ -1,6 +1,6 @@
 // stores/auth.ts
-import { defineStore } from 'pinia';
-import { ref, onMounted, onUnmounted } from 'vue';
+import {defineStore} from 'pinia';
+import {onMounted, onUnmounted, ref} from 'vue';
 import {useCookies} from "@vueuse/integrations/useCookies";
 import {axiosInstance} from "@/plugins/axios";
 
@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
         isAuthenticated.value = res?.data?.success ?? false
       }).catch(() => {
         isAuthenticated.value = false
+        cookies.remove("baja-security")
       });
 
     } else {

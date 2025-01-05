@@ -2,7 +2,6 @@ import {config} from "md-editor-v3";
 import markdownContainer from "markdown-it-container";
 import {qrCodePlugin} from "@/plugins/markdown-plugins/qrcode";
 
-
 config({
 
 

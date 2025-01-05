@@ -14,7 +14,6 @@ const theme = useTheme()
 const authStore = useAuthStore();
 
 onMounted(() => {
-  authStore.fetchUser()
   authStore.startPolling();
 });
 

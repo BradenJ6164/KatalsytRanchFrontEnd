@@ -191,7 +191,12 @@ async function login() {
         password: password,
       }).then(async (response) => {
         const data = response.data as sessionResult
-        cookies.set("baja-security", data.result.session.token, {sameSite: "strict"})
+        cookies.set("baja-security", data.result.session.token, {
+          path: "/",
+          secure: true,
+          maxAge: 604800,
+          sameSite: "strict"
+        })
         await authStore.fetchUser()
       }).catch((error) => {
         Swal.showValidationMessage(processErrors(error.response.data.errors));

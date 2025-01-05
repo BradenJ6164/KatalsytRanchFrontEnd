@@ -37,7 +37,6 @@ export const useGuide = (id: number | Ref<number>) => {
   onBeforeUnmount(() => {
     clearInterval(updateGuideInterval);
   });
-  updateGuide()
   return {
     currentGuide,
     refresh: updateGuide,
