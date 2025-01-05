@@ -2,7 +2,7 @@
 import {MdCatalog, MdEditor, MdPreview} from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
 import 'md-editor-v3/lib/style.css';
-import {useTheme} from "vuetify";
+import {useDisplay, useTheme} from "vuetify";
 import {useAuthStore} from "@/stores/auth";
 import {useGuide} from "@/hooks/useGuide";
 import {axiosInstance} from "@/plugins/axios";
@@ -20,6 +20,7 @@ const edit = ref(false)
 const loading = ref(true)
 const saveLoading = ref(false)
 const theme = useTheme()
+const display = useDisplay()
 const authStore = useAuthStore();
 const route = useRoute()
 
@@ -42,6 +43,7 @@ watch(currentGuide, (newValue) => {
     loading.value = false;
 
   } else {
+
     loading.value = true;
   }
   // Your custom hook logic here
@@ -59,6 +61,34 @@ const mdiPreviewTheme = computed(() => {
   return theme.global.current.value.dark == true ? 'dark' : 'light'
 })
 
+async function deleteGuide() {
+  Swal.fire({
+    title: "Delete Guide?",
+    icon: "warning",
+    text: `Are you sure you want to delete this guide? All data contained will be deleted and you can't undo this!`,
+    showCancelButton: true,
+    cancelButtonText: "Cancel",
+    confirmButtonText: "Delete",
+    showLoaderOnConfirm: true,
+    preConfirm: async () => {
+      await axiosInstance.post("/api/guides/deleteGuide", {guide_id: guideID.value}).then(async () => {
+      }).catch((error) => {
+
+        Swal.showValidationMessage(processErrors(error.response?.data.errors));
+      })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    if (result.isConfirmed) {
+      edit.value = false;
+      refresh();
+      Toast.fire({
+        icon: "success",
+        text: "Guide deleted!",
+      })
+    }
+  })
+}
 
 function revertChanges() {
   content.value = originalContent.value
@@ -72,6 +102,7 @@ async function saveGuide() {
   }).then(() => {
     originalContent.value = content.value;
     originalName.value = currentGuide.value?.name ?? "";
+    refresh()
     Toast.fire(
       {
         icon: "success",
@@ -93,6 +124,13 @@ async function saveGuide() {
 
 
 <template>
+  <v-empty-state
+    v-if="!loading && currentGuide === -1"
+    headline="404"
+    text="The guide requested does not exist"
+    title="Guide not found"
+  />
+
   <v-app-bar
     v-if="edit"
     color="warning"
@@ -126,6 +164,12 @@ async function saveGuide() {
       @click="revertChanges"
     >
       Revert Changes
+    </v-btn>
+    <v-btn
+      v-if="content == originalContent"
+      @click="deleteGuide"
+    >
+      Delete Guide
     </v-btn>
     <v-btn
       :disabled="content !== originalContent"
@@ -197,26 +241,21 @@ async function saveGuide() {
       @click="drawer = !drawer"
     />
 
-    <v-toolbar
+    <v-app-bar
       v-if="currentGuide && authStore.isAuthenticated && !edit"
+
+      flat
       style="background: none;"
     >
       <v-spacer />
-      <span
-        v-if="currentGuide"
-        class="text-sm-button"
-      >
-        Last Updated: {{
-          new Date(parseInt(currentGuide?.last_save) * 1000).toDateString() + " @ " + new Date(parseInt(currentGuide?.last_save) * 1000).toLocaleTimeString()
-        }}
-      </span>
+
       <v-btn
         icon="mdi-pencil"
 
         variant="text"
         @click="edit = !edit"
       />
-    </v-toolbar>
+    </v-app-bar>
 
 
     <MdPreview
@@ -225,15 +264,51 @@ async function saveGuide() {
       :model-value="content"
       :theme="mdiPreviewTheme"
     />
+    <v-alert
+      v-if="edit"
+      type="info"
+    >
+      <v-alert-title>New to Markdown?</v-alert-title>
+      Check out the markdown cheat-sheet <a
+        href="https://www.markdownguide.org/cheat-sheet/"
+        target="_blank"
+      >here</a>!
+    </v-alert>
+    <br>
     <MdEditor
       v-if=" edit && authStore.isAuthenticated"
       v-model="content"
       :editor-id="id"
+      :footers="['markdownTotal', 0, '=', 1, 'scrollSwitch']"
       :theme="mdiPreviewTheme"
       :toolbars-exclude="['github','htmlPreview','fullscreen','save']"
       language="en-us"
       no-upload-img
-    />
+    >
+      <template #defFooters>
+        <span>
+          {{
+            'Last Updated: ' + new Date(parseInt(currentGuide?.last_save) * 1000).toDateString() + ' @ '
+              +
+              new
+                Date(parseInt(currentGuide?.last_save)
+                  *
+                  1000).toLocaleTimeString()
+          }}
+        </span>
+        <span>
+          {{
+            'Created: ' + new Date(parseInt(currentGuide?.created_at) * 1000).toDateString() + ' @ '
+              +
+              new
+                Date(parseInt(currentGuide?.created_at)
+                  *
+                  1000).toLocaleTimeString()
+          }}
+        </span>
+      </template>
+    </MdEditor>
+    <br>
     <v-alert
       v-if="edit && content !== originalContent"
       type="warning"

@@ -1,37 +1,35 @@
 <template>
-
-      <router-view />
-
+  <router-view />
 </template>
 
 <script lang="ts" setup>
-  //
+//
 
 
+import {useTheme} from "vuetify";
+import {useAuthStore} from "@/stores/auth";
 
-  const authStore = useAuthStore();
+const theme = useTheme()
 
-  onMounted(() => {
-    authStore.fetchUser()
-    authStore.startPolling();
-  });
+const authStore = useAuthStore();
 
-  import {useTheme} from "vuetify";
-  import {useAuthStore} from "@/stores/auth";
-  const theme = useTheme()
+onMounted(() => {
+  authStore.fetchUser()
+  authStore.startPolling();
+});
 
-  onBeforeMount(()=>{
-    if(new Date().getHours() >= 18 || new Date().getHours() <= 6) {
-      theme.global.name.value = "dark"
-    } else {
-      theme.global.name.value = "light"
-    }
-  })
-  setInterval(()=>{
-    if(new Date().getHours() >= 18 || new Date().getHours() <= 6) {
-      theme.global.name.value = "dark"
-    } else {
-      theme.global.name.value = "light"
-    }
-  },1000)
+onBeforeMount(() => {
+  if (new Date().getHours() >= 18 || new Date().getHours() <= 6) {
+    theme.global.name.value = "dark"
+  } else {
+    theme.global.name.value = "light"
+  }
+})
+setInterval(() => {
+  if (new Date().getHours() >= 18 || new Date().getHours() <= 6) {
+    theme.global.name.value = "dark"
+  } else {
+    theme.global.name.value = "light"
+  }
+}, 1000)
 </script>

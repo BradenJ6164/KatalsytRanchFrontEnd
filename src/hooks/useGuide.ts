@@ -7,6 +7,7 @@ interface GuideData {
   guide_id: string;
   content: string;
   last_save: number;
+  created_at: number;
 }
 
 export const useGuide = (id: number | Ref<number>) => {
