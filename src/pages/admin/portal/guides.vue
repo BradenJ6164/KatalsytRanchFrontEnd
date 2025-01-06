@@ -44,7 +44,7 @@
         <v-btn
           flat
           icon="mdi-pencil"
-          @click="router.push(`/guides/${item.guide_id}`)"
+          @click="router.push(`/guides/${item.guide_id}?edit=true`)"
         />
         <v-btn
           flat

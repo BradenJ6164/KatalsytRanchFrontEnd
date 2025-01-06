@@ -24,6 +24,10 @@ const display = useDisplay()
 const authStore = useAuthStore();
 const route = useRoute()
 
+if (route.query.edit) {
+  edit.value = true
+}
+
 const guideID = ref(-1)
 
 let path = route.fullPath;
