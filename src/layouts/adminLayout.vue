@@ -30,7 +30,7 @@
                   :src="auth.userInformation?.avatar"
                   alt="Avatar"
                 />
-                <span>
+                <span v-else>
                   {{ getInitials(auth.userInformation?.name) }}
                 </span>
               </v-avatar>
