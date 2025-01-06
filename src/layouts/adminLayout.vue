@@ -80,6 +80,23 @@
           title="Dashboard"
           to="/admin"
         />
+
+        <v-list-group>
+          <template #activator="{ props }">
+            <v-list-item
+              prepend-icon="mdi-wrench-cog-outline"
+              title="Portal Configuration"
+              v-bind="props"
+            />
+          </template>
+
+          <v-list-item
+            link
+            prepend-icon="mdi-book-open-variant-outline"
+            title="Guides"
+            to="/admin/portal/guides"
+          />
+        </v-list-group>
         <v-list-item
           link
           prepend-icon="mdi-book-check-outline"

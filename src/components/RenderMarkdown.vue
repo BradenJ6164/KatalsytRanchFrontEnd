@@ -34,6 +34,7 @@ guideID.value = parseInt(path) ?? -1
 
 
 const {currentGuide, refresh} = useGuide(guideID);
+const router = useRouter()
 
 watch(currentGuide, (newValue) => {
   if (newValue !== undefined) {
@@ -241,12 +242,20 @@ async function saveGuide() {
       @click="drawer = !drawer"
     />
 
-    <v-app-bar
+    <v-toolbar
       v-if="currentGuide && authStore.isAuthenticated && !edit"
+      density="compact"
 
       flat
       style="background: none;"
     >
+      <v-btn
+        variant="text"
+        @click="router.push('/admin/portal/guides')"
+      >
+        All Guides
+      </v-btn>
+
       <v-spacer />
 
       <v-btn
@@ -255,7 +264,7 @@ async function saveGuide() {
         variant="text"
         @click="edit = !edit"
       />
-    </v-app-bar>
+    </v-toolbar>
 
 
     <MdPreview
