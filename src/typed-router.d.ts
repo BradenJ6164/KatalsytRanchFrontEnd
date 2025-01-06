@@ -19,8 +19,17 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/[all]': RouteRecordInfo<'/[all]', '/:all', { all: ParamValue<true> }, { all: ParamValue<false> }>,
+    '/admin': RouteRecordInfo<'/admin', '/admin', Record<never, never>, Record<never, never>>,
+    '/admin/': RouteRecordInfo<'/admin/', '/admin', Record<never, never>, Record<never, never>>,
+    '/admin/[all]': RouteRecordInfo<'/admin/[all]', '/admin/:all', { all: ParamValue<true> }, { all: ParamValue<false> }>,
+    '/admin/accounts': RouteRecordInfo<'/admin/accounts', '/admin/accounts', Record<never, never>, Record<never, never>>,
+    '/admin/bookings': RouteRecordInfo<'/admin/bookings', '/admin/bookings', Record<never, never>, Record<never, never>>,
+    '/admin/chat': RouteRecordInfo<'/admin/chat', '/admin/chat', Record<never, never>, Record<never, never>>,
+    '/admin/property-settings': RouteRecordInfo<'/admin/property-settings', '/admin/property-settings', Record<never, never>, Record<never, never>>,
     '/gallery': RouteRecordInfo<'/gallery', '/gallery', Record<never, never>, Record<never, never>>,
+    '/guides': RouteRecordInfo<'/guides', '/guides', Record<never, never>, Record<never, never>>,
+    '/guides/[id]': RouteRecordInfo<'/guides/[id]', '/guides/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/nearby': RouteRecordInfo<'/nearby', '/nearby', Record<never, never>, Record<never, never>>,
-    '/test': RouteRecordInfo<'/test', '/test', Record<never, never>, Record<never, never>>,
   }
 }

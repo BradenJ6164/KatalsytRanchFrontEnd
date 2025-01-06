@@ -22,23 +22,29 @@
 
     <v-btn
       v-if="!authStore.isAuthenticated"
-      key="4"
+      key="5"
       icon="mdi-account-plus"
-      @click="register"
+      @click="async ()=>{await register().then((res)=>{if(res){login()}})}"
     />
 
     <v-btn
       v-if="!authStore.isAuthenticated"
-      key="3"
+      key="4"
       icon="mdi-login"
-      @click="login"
+      @click="async ()=>{await login(); await authStore.fetchUser()}"
     />
 
     <v-btn
       v-if="authStore.isAuthenticated"
+      key="3"
+      icon="mdi-wrench-cog-outline"
+      to="/admin"
+    />
+    <v-btn
+      v-if="authStore.isAuthenticated"
       key="2"
       icon="mdi-logout"
-      @click="logout"
+      @click="async ()=>{await logout(); await authStore.fetchUser()}"
     />
 
 
@@ -101,188 +107,12 @@
 
 
 <script lang="ts" setup>
-import Swal from 'sweetalert2'
-
 import '@sweetalert2/themes/dark/dark.css';
-import {axiosInstance} from "@/plugins/axios";
-import {useCookies} from "@vueuse/integrations/useCookies";
-import {Toast} from "@/plugins/sweetalert";
 import {useAuthStore} from "@/stores/auth";
-import {processErrors} from "@/utils/processErrors";
+import {login, logout, register} from "@/ui-flows/auth";
 
 const authStore = useAuthStore()
 
-
-const cookies = useCookies(["baja-security"])
-
-async function logout() {
-  Swal.fire({
-    title: "Do you want to logout of the panel?",
-    showCancelButton: true,
-    cancelButtonText: "Cancel",
-    confirmButtonText: "Logout",
-    showLoaderOnConfirm: true,
-    preConfirm: async () => {
-
-      await axiosInstance.post("/api/auth/logout").then(async () => {
-        cookies.remove("baja-security")
-        await authStore.fetchUser()
-
-      }).catch((error) => {
-        Swal.showValidationMessage(processErrors(error.response.data.errors));
-      })
-
-    },
-    allowOutsideClick: () => !Swal.isLoading()
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Toast.fire({
-        icon: "success",
-        text: "Logout success!",
-      })
-    }
-  })
-}
-
-async function login() {
-  interface sessionResult {
-    success: boolean;
-    result: {
-      session: {
-        token: string;
-      }
-    }
-  }
-
-  let usernameInput: HTMLInputElement
-  let passwordInput: HTMLInputElement
-
-  interface formResponse {
-    username: string,
-    password: string
-  }
-
-  await Swal.fire({
-    title: "Login to Panel",
-    html: `
-    <input id="username" class="swal2-input" type="email" placeholder="Email address">
-    <input id="password" class="swal2-input" type="password" placeholder="Password">
-  `,
-    focusConfirm: false,
-    showCancelButton: true,
-    didOpen: () => {
-      const popup = Swal.getPopup()!
-      usernameInput = popup.querySelector('#username') as HTMLInputElement
-      passwordInput = popup.querySelector('#password') as HTMLInputElement
-      usernameInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
-      passwordInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
-    },
-    confirmButtonText: 'Login',
-    showLoaderOnConfirm: true,
-    preConfirm: async () => {
-
-      const username = usernameInput.value
-      const password = passwordInput.value
-      if (!username || !password) {
-        Swal.showValidationMessage(`Please enter email and password`)
-      }
-      await axiosInstance.post("/api/auth/login", {
-        email: username,
-        password: password,
-      }).then(async (response) => {
-        const data = response.data as sessionResult
-        cookies.set("baja-security", data.result.session.token, {
-          path: "/",
-          secure: true,
-          maxAge: 604800,
-          sameSite: "strict"
-        })
-        await authStore.fetchUser()
-      }).catch((error) => {
-        Swal.showValidationMessage(processErrors(error.response.data.errors));
-      })
-    },
-    allowOutsideClick: () => !Swal.isLoading()
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Toast.fire({
-        icon: "success",
-        text: "Login success!",
-      })
-    }
-  });
-}
-
-async function register() {
-  let emailInput: HTMLInputElement
-  let usernameInput: HTMLInputElement
-  let passwordInput: HTMLInputElement
-  let entitlementInput: HTMLInputElement
-
-  interface formResponse {
-    username: string,
-    email: string,
-    password: string,
-    entitlement: string
-  }
-
-  await Swal.fire({
-    title: "Register to Panel",
-    html: `
-    <input id="username" class="swal2-input" type="text" placeholder="Username">
-     <input id="email" class="swal2-input" type="email" placeholder="Email address">
-    <input id="password" class="swal2-input" type="password" placeholder="Password">
-     <input id="entitlement" class="swal2-input" type="password" placeholder="Entitlement ID">
-  `,
-    focusConfirm: false,
-    showCancelButton: true,
-    didOpen: () => {
-      const popup = Swal.getPopup()!
-      emailInput = popup.querySelector('#email') as HTMLInputElement
-      usernameInput = popup.querySelector('#username') as HTMLInputElement
-      passwordInput = popup.querySelector('#password') as HTMLInputElement
-      entitlementInput = popup.querySelector('#entitlement') as HTMLInputElement
-      emailInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
-      usernameInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
-      passwordInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
-      entitlementInput.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
-    },
-    confirmButtonText: 'Register',
-    showLoaderOnConfirm: true,
-    preConfirm: async () => {
-
-      const email = emailInput.value
-      const username = usernameInput.value
-      const password = passwordInput.value
-      const entitlement = entitlementInput.value
-      if (!username || !password || !entitlement || !email) {
-        Swal.showValidationMessage(`Please enter user, email, password, and entitlement. `)
-      }
-      await axiosInstance.post("/api/auth/register", {
-        name: username,
-        email: email,
-        password: password,
-        ["registration_key"]: entitlement,
-      }).then(() => {
-
-      }).catch((error) => {
-        Swal.showValidationMessage(processErrors(error.response.data.errors));
-      })
-    },
-
-
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Toast.fire({
-        icon: "success",
-        text: "Register success!",
-      })
-      login()
-    }
-  });
-
-
-}
 
 function reload() {
   window.location.reload()

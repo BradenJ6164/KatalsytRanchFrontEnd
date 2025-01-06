@@ -4,8 +4,18 @@ import {onMounted, onUnmounted, ref} from 'vue';
 import {useCookies} from "@vueuse/integrations/useCookies";
 import {axiosInstance} from "@/plugins/axios";
 
+export interface UserInformation {
+  id: number,
+  name: string,
+  email: string,
+  role: string,
+  avatar: string,
+}
+
 export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = ref(false);
+  const userInformation = ref<UserInformation | null>(null);
+
   let intervalId: number | null = null;
 
   //API call to check authentication
@@ -17,8 +27,14 @@ export const useAuthStore = defineStore('auth', () => {
 
       axiosInstance.post("/api/auth/verifyToken").then((res) => {
         isAuthenticated.value = res?.data?.success ?? false
+        if (isAuthenticated.value) {
+          userInformation.value = res?.data?.user
+        } else {
+          userInformation.value = null
+        }
       }).catch(() => {
         isAuthenticated.value = false
+        userInformation.value = null
         cookies.remove("baja-security")
       });
 
@@ -51,6 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     isAuthenticated,
+    userInformation,
     startPolling,
     stopPolling,
     fetchUser,

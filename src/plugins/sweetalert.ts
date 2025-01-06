@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import {processErrors} from "@/utils/processErrors";
 
 export const Toast = Swal.mixin({
   toast: true,
@@ -11,6 +12,22 @@ export const Toast = Swal.mixin({
     toast.onmouseleave = Swal.resumeTimer;
   }
 });
+
+export async function SendSuccess(text: string) {
+  await Toast.fire({
+    text: text,
+    icon: "success",
+  })
+}
+
+export async function SendError(error: any) {
+  await Swal.fire({
+    icon: 'error',
+    title: "Error",
+    text: processErrors(error.response.data.errors),
+    confirmButtonText: "OK",
+  })
+}
 
 export function showLoading() {
   Swal.fire({
