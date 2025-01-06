@@ -76,7 +76,7 @@ const headers = [
     key: 'name',
   },
   {
-    title: 'Last Saved',
+    title: 'Last Updated',
     key: 'last_save',
   },
   {
