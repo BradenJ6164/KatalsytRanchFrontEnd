@@ -11,7 +11,7 @@
       />
       <v-app-bar-title>Admin Panel</v-app-bar-title>
       <v-spacer />
-      <v-menu>
+      <v-menu v-if="auth.userInformation && auth.userInformation.name">
         <template #activator="{ props }">
           <v-btn
             :ripple="false"
@@ -121,6 +121,7 @@
     <v-main>
       <slot />
     </v-main>
+    <AppFooter />
   </v-app>
 </template>
 
