@@ -60,7 +60,7 @@
     fixed
   >
     <v-btn
-      to="/guides/1"
+      to="/guides/6"
       value="guides"
     >
       <v-icon>mdi-text-box-multiple-outline</v-icon>

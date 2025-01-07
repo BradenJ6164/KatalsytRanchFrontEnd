@@ -76,7 +76,7 @@
     </v-data-table>
 
     <custom-swipe-list
-      v-if="currentGuides"
+      v-if="currentGuides && display.smAndDown.value"
       ref="swipeList"
       :disabled="swipeDisable"
       :items="currentGuides ?? []"
