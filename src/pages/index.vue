@@ -51,8 +51,7 @@
             class="text-h5 font-weight-regular"
           >
             Checkout:
-            {{ getWeekday(new Date(currentReservation?.CheckOut * 1000)) }} @
-            {{ new Date(currentReservation?.CheckOut * 1000).toLocaleTimeString() }}
+            {{ formatRelative(new Date(currentReservation.CheckOut * 1000), new Date(Date.now())) }}
           </div>
         </div>
 
@@ -60,122 +59,122 @@
         <!--      <h2 class="text-h4 font-weight-regular">Your Checklist-->
         <!--:</h2>-->
         <div class="py-2" />
-        <v-row>
-          <v-col cols="12">
-            <v-card
-              class="py-4"
-              color="surface-variant"
+        <!--        <v-row>-->
+        <!--          <v-col cols="12">-->
+        <!--            <v-card-->
+        <!--              class="py-4"-->
+        <!--              color="surface-variant"-->
 
-              prepend-icon="mdi-rocket-launch-outline"
-              rounded="lg"
-              variant="outlined"
-            >
-              <template #title>
-                <h2 class="text-h5 font-weight-bold">
-                  Check In
-                </h2>
-              </template>
+        <!--              prepend-icon="mdi-rocket-launch-outline"-->
+        <!--              rounded="lg"-->
+        <!--              variant="outlined"-->
+        <!--            >-->
+        <!--              <template #title>-->
+        <!--                <h2 class="text-h5 font-weight-bold">-->
+        <!--                  Check In-->
+        <!--                </h2>-->
+        <!--              </template>-->
 
-              <template #subtitle>
-                <div class="text-subtitle-1">
-                  We're so glad your here! Let's get you checked in.
-                </div>
-              </template>
+        <!--              <template #subtitle>-->
+        <!--                <div class="text-subtitle-1">-->
+        <!--                  We're so glad your here! Let's get you checked in.-->
+        <!--                </div>-->
+        <!--              </template>-->
 
-              <template #append>
-                <v-btn
-                  color="primary"
-                  @click="checkIn"
-                >
-                  Check In
-                </v-btn>
-              </template>
-            </v-card>
-          </v-col>
+        <!--              <template #append>-->
+        <!--                <v-btn-->
+        <!--                  color="primary"-->
+        <!--                  @click="checkIn"-->
+        <!--                >-->
+        <!--                  Check In-->
+        <!--                </v-btn>-->
+        <!--              </template>-->
+        <!--            </v-card>-->
+        <!--          </v-col>-->
 
-          <v-col cols="12">
-            <v-card
-              class="py-4"
-              color="surface-variant"
+        <!--          <v-col cols="12">-->
+        <!--            <v-card-->
+        <!--              class="py-4"-->
+        <!--              color="surface-variant"-->
 
-              prepend-icon="mdi-invoice-list-outline"
-              rounded="lg"
-              variant="outlined"
-            >
-              <template #title>
-                <h2 class="text-h5 font-weight-bold">
-                  House Rules
-                </h2>
-              </template>
+        <!--              prepend-icon="mdi-invoice-list-outline"-->
+        <!--              rounded="lg"-->
+        <!--              variant="outlined"-->
+        <!--            >-->
+        <!--              <template #title>-->
+        <!--                <h2 class="text-h5 font-weight-bold">-->
+        <!--                  House Rules-->
+        <!--                </h2>-->
+        <!--              </template>-->
 
-              <template #subtitle>
-                <div class="text-subtitle-1">
-                  Take a look at the house rules!
-                </div>
-              </template>
-              <template #append>
-                <v-btn
-                  color="primary"
-                  to="/guides/houseRules"
+        <!--              <template #subtitle>-->
+        <!--                <div class="text-subtitle-1">-->
+        <!--                  Take a look at the house rules!-->
+        <!--                </div>-->
+        <!--              </template>-->
+        <!--              <template #append>-->
+        <!--                <v-btn-->
+        <!--                  color="primary"-->
+        <!--                  to="/guides/houseRules"-->
 
-                  width="204"
-                >
-                  House Rules
-                </v-btn>
-              </template>
-            </v-card>
-          </v-col>
-          <v-col cols="12">
-            <v-card
-              class="py-4"
-              color="surface-variant"
+        <!--                  width="204"-->
+        <!--                >-->
+        <!--                  House Rules-->
+        <!--                </v-btn>-->
+        <!--              </template>-->
+        <!--            </v-card>-->
+        <!--          </v-col>-->
+        <!--          <v-col cols="12">-->
+        <!--            <v-card-->
+        <!--              class="py-4"-->
+        <!--              color="surface-variant"-->
 
-              prepend-icon="mdi-wifi"
-              rounded="lg"
-              variant="outlined"
-            >
-              <template #title>
-                <h2 class="text-h5 font-weight-bold">
-                  Wi-Fi
-                </h2>
-              </template>
+        <!--              prepend-icon="mdi-wifi"-->
+        <!--              rounded="lg"-->
+        <!--              variant="outlined"-->
+        <!--            >-->
+        <!--              <template #title>-->
+        <!--                <h2 class="text-h5 font-weight-bold">-->
+        <!--                  Wi-Fi-->
+        <!--                </h2>-->
+        <!--              </template>-->
 
-              <template #subtitle>
-                <div class="text-subtitle-1">
-                  Hell yeah! There's Wi-Fi! Scan the QR code with your iOS or Android phone to join
-                </div>
-              </template>
+        <!--              <template #subtitle>-->
+        <!--                <div class="text-subtitle-1">-->
+        <!--                  Hell yeah! There's Wi-Fi! Scan the QR code with your iOS or Android phone to join-->
+        <!--                </div>-->
+        <!--              </template>-->
 
-              <template #text>
-                <v-img
-                  src="https://i.imgur.com/46y7MTw.png"
-                  width="120px"
-                />
-              </template>
-              <template #append>
-                <v-menu>
-                  <template #activator="{ props }">
-                    <v-btn
-                      color="primary"
-                      v-bind="props"
-                    >
-                      Wifi Credentials
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-card-title>
-                      Wifi Information
-                    </v-card-title>
-                    <v-card-text>
-                      Wifi Name: The Ranch <br>
-                      Password: VIEWS4DAYS
-                    </v-card-text>
-                  </v-card>
-                </v-menu>
-              </template>
-            </v-card>
-          </v-col>
-        </v-row>
+        <!--              <template #text>-->
+        <!--                <v-img-->
+        <!--                  src="https://i.imgur.com/46y7MTw.png"-->
+        <!--                  width="120px"-->
+        <!--                />-->
+        <!--              </template>-->
+        <!--              <template #append>-->
+        <!--                <v-menu>-->
+        <!--                  <template #activator="{ props }">-->
+        <!--                    <v-btn-->
+        <!--                      color="primary"-->
+        <!--                      v-bind="props"-->
+        <!--                    >-->
+        <!--                      Wifi Credentials-->
+        <!--                    </v-btn>-->
+        <!--                  </template>-->
+        <!--                  <v-card>-->
+        <!--                    <v-card-title>-->
+        <!--                      Wifi Information-->
+        <!--                    </v-card-title>-->
+        <!--                    <v-card-text>-->
+        <!--                      Wifi Name: The Ranch <br>-->
+        <!--                      Password: VIEWS4DAYS-->
+        <!--                    </v-card-text>-->
+        <!--                  </v-card>-->
+        <!--                </v-menu>-->
+        <!--              </template>-->
+        <!--            </v-card>-->
+        <!--          </v-col>-->
+        <!--        </v-row>-->
       </v-responsive>
     </v-container>
     <Winter style="width: 100vw; height: 100vh" />
@@ -184,7 +183,7 @@
 
 <script lang="ts" setup>
 //
-
+import {formatRelative} from "date-fns";
 //
 //
 import {useCurrentTime} from "./../hooks/useCurrentTime"

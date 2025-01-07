@@ -55,6 +55,7 @@
     />
   </v-speed-dial>
   <v-bottom-navigation
+    :density="display.xs ? 'comfortable' : 'default'"
     bg-color="primary"
     dark
     fixed
@@ -110,6 +111,9 @@
 import '@sweetalert2/themes/dark/dark.css';
 import {useAuthStore} from "@/stores/auth";
 import {login, logout, register} from "@/ui-flows/auth";
+import {useDisplay} from "vuetify";
+
+const display = useDisplay()
 
 const authStore = useAuthStore()
 

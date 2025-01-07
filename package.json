@@ -29,6 +29,7 @@
     "@vueuse/integrations": "^12.3.0",
     "axios": "^1.7.9",
     "core-js": "^3.37.1",
+    "date-fns": "^4.1.0",
     "ical.js": "^2.1.0",
     "js-yaml": "^4.1.0",
     "mapbox-gl": "^3.9.0",
