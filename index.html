@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
+<head>
+  <link
+    href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css"
+    rel="stylesheet"
+  />
 
 
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ranch</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+  <meta charset="UTF-8">
+  <link href="/favicon.ico" rel="icon">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>The Ranch</title>
+</head>
+<body>
+<div id="app"></div>
+<script src="/src/main.ts" type="module"></script>
+<script>
+    document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+        // special hack to prevent zoom-to-tabs gesture in safari
+        document.body.style.zoom = 0.99;
+    });
+
+    document.addEventListener('gesturechange', function (e) {
+        e.preventDefault();
+        // special hack to prevent zoom-to-tabs gesture in safari
+        document.body.style.zoom = 0.99;
+    });
+
+    document.addEventListener('gestureend', function (e) {
+        e.preventDefault();
+        // special hack to prevent zoom-to-tabs gesture in safari
+        document.body.style.zoom = 0.99;
+    });
+
+
+</script>
+</body>
 </html>
