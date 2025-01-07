@@ -86,6 +86,10 @@ async function deleteGuide() {
   }).then((result) => {
     if (result.isConfirmed) {
       edit.value = false;
+      if (route.query.backToAdmin) {
+        router.push(`/admin/portal/guides`);
+        return;
+      }
       refresh();
       Toast.fire({
         icon: "success",
@@ -141,17 +145,17 @@ async function saveGuide() {
     color="warning"
     density="compact"
   >
-    <v-app-bar-title>
-      Guide Editor: &nbsp;
-      <input
+    <v-app-bar-title v-if="display.mdAndUp.value">
+      <v-text-field
         v-if="currentGuide"
         v-model="currentGuide.name"
-        class="text-white border-dashed p-5"
-        name="fname"
-        placeholder="Guide Name..."
-        style="outline: none"
-        type="text"
-      >
+        counter="32"
+        density="compact"
+        hide-details
+        placeholder="Guide Name"
+        single-line
+        variant="outlined"
+      />
     </v-app-bar-title>
     <!--    <template #extension>-->
     <!--      <v-text-field-->
@@ -178,7 +182,13 @@ async function saveGuide() {
     </v-btn>
     <v-btn
       :disabled="content !== originalContent"
-      @click="edit = !edit"
+      @click="()=>{
+        if (route.query.backToAdmin) {
+          router.push(`/admin/portal/guides`);
+        } else {
+          edit = !edit;
+        }
+      }"
     >
       Exit Editor
     </v-btn>
@@ -191,7 +201,9 @@ async function saveGuide() {
     >
       Save Guide
     </v-btn>
+    <v-spacer v-if="display.smAndDown.value" />
   </v-app-bar>
+
   <v-container v-if="loading">
     <v-responsive class="align-center text-center fill-height">
       <v-progress-circular
@@ -277,6 +289,17 @@ async function saveGuide() {
       :model-value="content"
       :theme="mdiPreviewTheme"
     />
+    <v-list-item v-if="display.smAndDown.value">
+      <v-text-field
+        v-if="currentGuide"
+        v-model="currentGuide.name"
+        bg-color="backgroundGrey"
+        counter="32"
+        density="compact"
+        placeholder="Guide Name"
+        variant="outlined"
+      />
+    </v-list-item>
     <v-alert
       v-if="edit"
       type="info"
@@ -345,6 +368,10 @@ async function saveGuide() {
   <!--    ></VMarkdownView>-->
 </template>
 <style>
+.v-input__slot {
+  transform: scale(.65)
+}
+
 .hyphenate {
   word-wrap: break-word;
   overflow-wrap: break-word;

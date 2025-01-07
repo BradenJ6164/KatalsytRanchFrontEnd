@@ -4,6 +4,7 @@
 
 <script lang="ts" setup>
 //
+import 'vue3-swipe-actions/dist/index.css';
 
 
 import {useTheme} from "vuetify";

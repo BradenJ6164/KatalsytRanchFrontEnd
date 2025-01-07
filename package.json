@@ -44,6 +44,7 @@
     "vite-plugin-mdx": "^3.6.1",
     "vue": "^3.4.31",
     "vue-tsx": "^1.0.13",
+    "vue3-swipe-actions": "^0.0.1",
     "vuelidate": "^0.7.7",
     "vuetify": "^3.6.14"
   },

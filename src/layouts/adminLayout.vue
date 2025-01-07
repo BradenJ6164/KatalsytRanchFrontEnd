@@ -9,7 +9,7 @@
         v-if="display.smAndDown.value"
         @click="drawer=!drawer"
       />
-      <v-app-bar-title>Admin Panel</v-app-bar-title>
+      <v-app-bar-title>Admin</v-app-bar-title>
       <v-spacer />
       <v-menu v-if="auth.userInformation && auth.userInformation.name">
         <template #activator="{ props }">
@@ -19,7 +19,7 @@
             v-bind="props"
             variant="text"
           >
-            {{ auth.userInformation?.name }}
+            {{ display.smAndUp.value ? auth.userInformation?.name : "" }}
             <template #prepend>
               <v-avatar
                 color="secondary"
