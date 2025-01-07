@@ -55,11 +55,9 @@
     />
   </v-speed-dial>
   <v-bottom-navigation
-    :density="display.xs ? 'comfortable' : 'default'"
     bg-color="primary"
     dark
     fixed
-    height="56"
   >
     <v-btn
       to="/guides/1"
