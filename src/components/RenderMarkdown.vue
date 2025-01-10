@@ -28,13 +28,8 @@ if (route.query.edit) {
   edit.value = true
 }
 
-const guideID = ref(-1)
-
-let path = route.fullPath;
-if (path.includes('/guides')) {
-  path = path.replace(/^\/guides\//, '');
-}
-guideID.value = parseInt(path) ?? -1
+const guideID = ref(undefined)
+guideID.value = route.params.guide_id
 
 
 const {currentGuide, refresh} = useGuide(guideID);
@@ -58,7 +53,7 @@ watch(route, () => {
   if (path.includes('/guides')) {
     path = path.replace(/^\/guides\//, '');
   }
-  guideID.value = parseInt(path) ?? -1
+  guideID.value = route.params.guide_id
 })
 
 
@@ -87,7 +82,7 @@ async function deleteGuide() {
     if (result.isConfirmed) {
       edit.value = false;
       if (route.query.backToAdmin) {
-        router.push(`/admin/portal/guides`);
+        router.push(`/admin${route.params.id}/portal/guides`);
         return;
       }
       refresh();
@@ -184,7 +179,7 @@ async function saveGuide() {
       :disabled="content !== originalContent"
       @click="()=>{
         if (route.query.backToAdmin) {
-          router.push(`/admin/portal/guides`);
+          router.push(`/admin/${route.params.id}/portal/guides`);
         } else {
           edit = !edit;
         }
@@ -267,7 +262,7 @@ async function saveGuide() {
     >
       <v-btn
         variant="text"
-        @click="router.push('/admin/portal/guides')"
+        @click="router.push(`/admin/${route.params.id}/portal/guides`)"
       >
         All Guides
       </v-btn>

@@ -12,10 +12,11 @@ interface GuideData {
 export const useGuides = () => {
   const currentGuides = ref<GuideData[]>([]);
   const loading = ref(false)
+  const route = useRoute();
   const updateGuides = async () => {
 
     loading.value = true;
-    await axiosInstance.get(`/api/guides/getGuides`).then((response) => {
+    await axiosInstance.get(`/api/guides/getGuides?property_id=${route.params.id}`).then((response) => {
       const body = response.data;
       currentGuides.value = body.result as GuideData[];
     }).catch(() => {
@@ -27,6 +28,10 @@ export const useGuides = () => {
 
   };
 
+
+  watch(route, () => {
+    updateGuides();
+  })
 
   const updateGuideInterval = setInterval(updateGuides, 15000);
   onBeforeUnmount(() => {

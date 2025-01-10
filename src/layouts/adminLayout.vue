@@ -9,8 +9,38 @@
         v-if="display.smAndDown.value"
         @click="drawer=!drawer"
       />
-      <v-app-bar-title>Admin</v-app-bar-title>
+      <!--      <v-app-bar-title v-if="display.smAndUp.value">-->
+      <!--        Admin-->
+      <!--      </v-app-bar-title>-->
       <v-spacer />
+
+      <Dialog
+        v-if="!loading"
+        v-model="siteSwitch"
+        max-width="700px"
+        title="Your Properties"
+        @close="()=>console.log('dialog closed')"
+      >
+        <template #activator="{ props }">
+          <v-btn
+            :ripple="false"
+            append-icon="mdi-chevron-down"
+            v-bind="props"
+            variant="text"
+          >
+            {{
+              currentProperties.map((v) => {
+                if (v.property_id === route.params.id) {
+                  return v.name
+                }
+              })[0]
+            }}
+          </v-btn>
+        </template>
+        <PropertySwitch @switched="siteSwitch = !siteSwitch" />
+      </Dialog>
+
+
       <v-menu v-if="auth.userInformation && auth.userInformation.name">
         <template #activator="{ props }">
           <v-btn
@@ -67,18 +97,19 @@
       app
     >
       <v-list nav>
+        <v-list-subheader>Admin Panel</v-list-subheader>
         <v-list-item
+          :to="`/portal/${route.params.id}`"
           link
           prepend-icon="mdi-rocket-outline"
           title="Landing Page"
-          to="/"
         />
         <v-list-item
+          :to="`/admin/${route.params.id}/`"
           exact
           link
           prepend-icon="mdi-view-dashboard-outline"
           title="Dashboard"
-          to="/admin"
         />
 
         <v-list-group>
@@ -91,35 +122,35 @@
           </template>
 
           <v-list-item
+            :to="`/admin/${route.params.id}/portal/guides`"
             link
             prepend-icon="mdi-book-open-variant-outline"
             title="Guides"
-            to="/admin/portal/guides"
           />
         </v-list-group>
         <v-list-item
+          :to="`/admin/${route.params.id}/bookings`"
           link
           prepend-icon="mdi-book-check-outline"
           title="Bookings"
-          to="/admin/bookings"
         />
         <v-list-item
+          :to="`/admin/${route.params.id}/chat`"
           link
           prepend-icon="mdi-chat-alert-outline"
           title="Chat"
-          to="/admin/chat"
         />
         <v-list-item
+          :to="`/admin/${route.params.id}/propery-settings`"
           link
           prepend-icon="mdi-account-box-outline"
           title="Property Settings"
-          to="/admin/property-settings"
         />
         <v-list-item
+          :to="`/admin/${route.params.id}/accounts`"
           link
           prepend-icon="mdi-account-group-outline"
           title="Accounts"
-          to="/admin/accounts"
         />
       </v-list>
 
@@ -148,11 +179,27 @@ import {useDisplay} from "vuetify";
 import {logout} from "@/ui-flows/auth";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/stores/auth";
+import {useProperties} from "@/hooks/useProperties";
 
 const display = useDisplay()
 const router = useRouter();
+const route = useRoute();
 const auth = useAuthStore()
 
+const {currentProperties, loading} = useProperties()
+
+//
+// const currentPropertyName = computed(() => {
+//   console.log(currentProperties)
+//   currentProperties.forEach(property => {
+//     if (property.property_id === route.params.id) {
+//       return property.name
+//     }
+//   })
+//   return ""
+// })
+
+const siteSwitch = ref(false)
 const drawer = ref(display.mdAndUp.value)
 const profileEdit = ref(false)
 

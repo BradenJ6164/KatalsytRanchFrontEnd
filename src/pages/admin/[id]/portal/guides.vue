@@ -65,7 +65,7 @@
         <v-btn
           flat
           icon="mdi-pencil"
-          @click="router.push(`/guides/${item.guide_id}?edit=true&backToAdmin=true`)"
+          @click="router.push(`/portal/${route.params.id}/guides/${item.guide_id}?edit=true&backToAdmin=true`)"
         />
         <v-btn
           flat
@@ -212,6 +212,7 @@ import task from "@/utils/task";
 
 const {currentGuides, refresh, loading} = useGuides();
 const router = useRouter()
+const route = useRoute()
 const display = useDisplay()
 
 const swipeList = ref(null);
@@ -264,6 +265,7 @@ async function createGuide() {
         Swal.showValidationMessage(`Please enter na,e`)
       }
       await axiosInstance.post("/api/guides/createGuide", {
+        property_id: route.params.id,
         name: name,
         content: ""
       }).then(async (response) => {

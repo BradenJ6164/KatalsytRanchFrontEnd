@@ -14,9 +14,9 @@ const theme = useTheme()
 
 const authStore = useAuthStore();
 
-onMounted(() => {
-  authStore.startPolling();
-});
+// onMounted(() => {
+//   authStore.startPolling();
+// });
 //
 // onBeforeMount(() => {
 //   if (new Date().getHours() >= 18 || new Date().getHours() <= 6) {

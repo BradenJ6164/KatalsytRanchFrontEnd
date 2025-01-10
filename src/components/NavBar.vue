@@ -1,7 +1,7 @@
 <template>
   <v-speed-dial
+    v-if="!authStore.isAuthenticated"
     app
-
     location="top end"
     transition="fade-transition"
   >
@@ -37,8 +37,8 @@
     <v-btn
       v-if="authStore.isAuthenticated"
       key="3"
+      :to="`/admin/${route.params.id}`"
       icon="mdi-wrench-cog-outline"
-      to="/admin"
     />
     <v-btn
       v-if="authStore.isAuthenticated"
@@ -60,7 +60,7 @@
     fixed
   >
     <v-btn
-      to="/guides/6"
+      :to="`/portal/${route.params.id}/guides/6`"
       value="guides"
     >
       <v-icon>mdi-text-box-multiple-outline</v-icon>
@@ -68,7 +68,7 @@
       <span>Guides</span>
     </v-btn>
     <v-btn
-      to="/guides/2"
+      :to="`/portal/${route.params.id}/guides/2`"
       value="rules"
     >
       <v-icon>mdi-script-text-outline</v-icon>
@@ -77,7 +77,7 @@
     </v-btn>
 
     <v-btn
-      to="/"
+      :to="`/portal/${route.params.id}/`"
       value="home"
     >
       <v-icon>mdi-home</v-icon>
@@ -86,7 +86,7 @@
     </v-btn>
 
     <v-btn
-      to="/nearby"
+      :to="`/portal/${route.params.id}/nearby`"
       value="nearby"
     >
       <v-icon>mdi-map-marker</v-icon>
@@ -94,7 +94,7 @@
       <span>Nearby</span>
     </v-btn>
     <v-btn
-      to="/gallery"
+      :to="`/portal/${route.params.id}/gallery`"
       value="gallery"
     >
       <v-icon>mdi-image-multiple</v-icon>
@@ -112,9 +112,9 @@ import {login, logout, register} from "@/ui-flows/auth";
 import {useDisplay} from "vuetify";
 
 const display = useDisplay()
+const route = useRoute()
 
 const authStore = useAuthStore()
-
 
 function reload() {
   window.location.reload()
