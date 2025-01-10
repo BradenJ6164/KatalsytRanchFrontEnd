@@ -1,6 +1,6 @@
 <template>
   <v-app
-    style="background-color: #232323; background-image: url('/public/theRanchBackground.jpg');  background-repeat: no-repeat;
+    style="background-color: #232323; background-image: url('https://i.imgur.com/dgkQvJf.jpeg');  background-repeat: no-repeat;
   background-size: cover; "
   >
     <DefaultAppBar />
