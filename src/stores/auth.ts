@@ -30,7 +30,9 @@ export const useAuthStore = defineStore('auth', () => {
         if (isAuthenticated.value) {
           userInformation.value = res?.data?.user
         } else {
+          isAuthenticated.value = false
           userInformation.value = null
+          cookies.remove("baja-security")
         }
       }).catch(() => {
         isAuthenticated.value = false

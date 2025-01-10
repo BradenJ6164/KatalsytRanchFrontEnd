@@ -19,6 +19,7 @@ export async function logout() {
       await axiosInstance.post("/api/auth/logout").then(async () => {
         cookies.remove("baja-security")
 
+
       }).catch((error) => {
         Swal.showValidationMessage(processErrors(error.response.data.errors));
       })
