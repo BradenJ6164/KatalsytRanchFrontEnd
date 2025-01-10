@@ -1,6 +1,7 @@
 import {onBeforeUnmount, ref} from "vue";
 
 import {axiosInstance} from "@/plugins/axios";
+import {useAuthStore} from "@/stores/auth";
 
 interface PropertyData {
   property_id: string;
@@ -10,11 +11,13 @@ interface PropertyData {
 }
 
 export const useProperties = () => {
+  const auth = useAuthStore()
   const currentProperties = ref<PropertyData[]>([]);
   const loading = ref(false)
   const route = useRoute();
   const updateProperties = async () => {
 
+    if (!auth.isAuthenticated) return {}
     loading.value = true;
     await axiosInstance.get("/api/properties/getProperties").then((res) => {
       // console.log(res.data);
