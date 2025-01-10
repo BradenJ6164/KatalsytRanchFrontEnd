@@ -1,9 +1,9 @@
 <template>
-  <v-toolbar
+  <v-app-bar
     v-if="auth.isAuthenticated"
+    
 
     color="transparent"
-
     density="compact"
     flat
   >
@@ -77,7 +77,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 <script lang="ts" setup>
 import {useAuthStore} from "@/stores/auth";

@@ -60,7 +60,7 @@
     fixed
   >
     <v-btn
-      :to="`/portal/${route.params.id}/guides/6`"
+      :to="`/portal/${route.params.id}/guides/6dc7c7d7-dd7a-4cc8-a1f2-494c67062ad2`"
       value="guides"
     >
       <v-icon>mdi-text-box-multiple-outline</v-icon>
@@ -68,16 +68,17 @@
       <span>Guides</span>
     </v-btn>
     <v-btn
-      :to="`/portal/${route.params.id}/guides/2`"
+      :to="`/portal/${route.params.id}/guides/7a85e5f0-b671-41d0-9d70-cee49280c7cb`"
       value="rules"
     >
       <v-icon>mdi-script-text-outline</v-icon>
 
-      <span>House Rules</span>
+      <span>Rules</span>
     </v-btn>
 
     <v-btn
       :to="`/portal/${route.params.id}/`"
+      exact
       value="home"
     >
       <v-icon>mdi-home</v-icon>
