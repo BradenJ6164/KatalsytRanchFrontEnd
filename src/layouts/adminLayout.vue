@@ -15,7 +15,7 @@
       <v-spacer />
 
       <Dialog
-      
+
         v-model="siteSwitch"
         max-width="700px"
         title="Your Properties"
@@ -215,7 +215,7 @@ async function logoutCall() {
 
     if (res) {
       await auth.fetchUser()
-      await router.push("/")
+      
     }
   })
 }

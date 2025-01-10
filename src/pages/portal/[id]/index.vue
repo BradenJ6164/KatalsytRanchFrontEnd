@@ -42,29 +42,38 @@
                 <br>
 
 
-                <div
+                <v-sheet
                   v-if="currentReservation"
-                  class="text-h4 font-weight-bold"
+                  color="transparent"
                 >
-                  {{ currentReservation?.Name }}
-                </div>
-                <div
-                  v-if="currentReservation"
-                  class="text-h6 font-weight-light"
-                >
-                  Party of
-                  {{ (parseInt(currentReservation?.Adults) + parseInt(currentReservation?.Children)) }}
-                </div>
-                <!--        <div v-if="currentReservation" class="text-h5 font-weight-regular">Checkout on {{weekdayMap[currentReservation?.CheckOut.dayOfWeek()]}} </div>-->
+                  <div
+
+                    class="text-h4 font-weight-bold"
+                  >
+                    {{ currentReservation?.Name }}
+                  </div>
+                  <div
+
+                    class="text-h6 font-weight-light"
+                  >
+                    Party of
+                    {{ (parseInt(currentReservation?.Adults) + parseInt(currentReservation?.Children)) }}
+                  </div>
+                  <!--        <div v-if="currentReservation" class="text-h5 font-weight-regular">Checkout on {{weekdayMap[currentReservation?.CheckOut.dayOfWeek()]}} </div>-->
 
 
-                <div
-                  v-if="currentReservation"
-                  class="text-h5 font-weight-regular"
-                >
-                  Checkout:
-                  {{ formatRelative(new Date(currentReservation.CheckOut * 1000), new Date(Date.now())) }}
-                </div>
+                  <div
+
+                    class="text-h5 font-weight-regular"
+                  >
+                    Checkout:
+                    {{ formatRelative(new Date(currentReservation.CheckOut * 1000), new Date(Date.now())) }}
+                  </div>
+                </v-sheet>
+                <v-skeleton-loader
+                  v-else
+                  type="list-item-two-line"
+                />
               </div>
             </v-card-text>
           </v-card>
