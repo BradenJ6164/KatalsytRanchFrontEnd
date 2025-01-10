@@ -15,7 +15,7 @@
       <v-spacer />
 
       <Dialog
-        v-if="!loading"
+      
         v-model="siteSwitch"
         max-width="700px"
         title="Your Properties"
