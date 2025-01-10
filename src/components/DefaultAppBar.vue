@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     v-if="auth.isAuthenticated"
-    
+
 
     color="transparent"
     density="compact"
@@ -115,7 +115,6 @@ async function logoutCall() {
 
     if (res) {
       await auth.fetchUser()
-      await router.push("/")
     }
   })
 }
