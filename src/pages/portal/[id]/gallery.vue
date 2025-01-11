@@ -67,12 +67,17 @@ import DefaultLayout from "@/layouts/defaultLayout.vue";
 
 const images = [
   "https://i.imgur.com/LAf5YiV.png",
-  "https://i.imgur.com/dgkQvJf.jpeg",
-  "https://i.imgur.com/OCZOoow.jpeg",
+
   "https://i.imgur.com/y7h4UsZ.jpeg",
   "https://i.imgur.com/jWLrmuR.jpeg",
-  "https://i.imgur.com/09VpuGf.jpeg",
-  "https://i.imgur.com/G3wRb5s.jpeg"
 
+  "https://i.imgur.com/G3wRb5s.jpeg",
+  "https://i.imgur.com/BuIBx7J.jpeg",
+  "https://i.imgur.com/c574S3e.jpeg",
+  "https://i.imgur.com/87J8FGy.jpeg",
+  "https://i.imgur.com/BXOwn0R.jpeg",
+  "https://i.imgur.com/4BqAvQu.jpeg",
+  "https://i.imgur.com/ORXcTj0.jpeg",
+  "https://i.imgur.com/ieuU3kS.jpeg"
 ]
 </script>
