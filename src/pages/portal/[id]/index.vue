@@ -67,7 +67,8 @@
                     class="text-h5 font-weight-regular"
                   >
                     Checkout:
-                    {{ formatRelative(new Date(currentReservation.CheckOut * 1000), new Date(Date.now())) }}
+                    {{ new Date(currentReservation.CheckOut * 1000).toLocaleDateString() + " at 10:00AM" }}
+                    <!--                    {{ formatRelative(new Date(currentReservation.CheckOut * 1000), new Date(Date.now())) }}-->
                   </div>
                 </v-sheet>
                 <v-skeleton-loader
@@ -208,7 +209,6 @@
 
 <script lang="ts" setup>
 //
-import {formatRelative} from "date-fns";
 //
 //
 import {useCurrentTime} from "./../../../hooks/useCurrentTime"
